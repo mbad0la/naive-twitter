@@ -19,5 +19,8 @@
   "dependencies": {
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1"
+  },
+  "devDependencies": {
+    "npmlog": "^4.0.2"
   }
 }
