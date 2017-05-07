@@ -16,6 +16,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+app.use(express.static('dist'))
+
 app.all('*', (req, res, next) => {
   log.http(req.method, req.url)
   next()
@@ -44,16 +46,12 @@ app.post('/validate', (req, res) => {
 
   validateToken(token)
   .then(feedback => {
-    res.send(JSON.stringify({isAuthenticated: feedback}))
+    res.send(JSON.stringify(feedback))
   })
 })
 
 app.get('/', (req, res) => {
-  res.send('Get World')
-})
-
-app.post('/', (req, res) => {
-  res.send('Post World')
+  res.sendFile('./index.html', { root: __dirname })
 })
 
 app.listen(serverConfig.port, () => {

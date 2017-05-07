@@ -16,16 +16,22 @@ const validateToken = token => {
         let tokenArgs = token.split(' ')
         if (tokenArgs[0] == 'JWT') {
           const credentials = jwt.decode(tokenArgs[1], serverConfig.jwtSecret)
+          User.findOne({ username: credentials.username }, 'password')
+          .then(user => {
+            if (user && user.password == credentials.password) {
+              resolve({ isAuthenticated: true, username: credentials.username })
+            } else {
+              resolve({ isAuthenticated: false })
+            }
+          })
         } else {
-          resolve(false)
+          resolve({ isAuthenticated: false })
         }
       } catch (e) {
-        resolve(false)
+        resolve({ isAuthenticated: false })
       }
-
-      resolve(true)
     } else {
-      resolve(false)
+      resolve({ isAuthenticated: false })
     }
   })
 }
@@ -33,9 +39,18 @@ const validateToken = token => {
 const verifyLogin = basicAuth => {
   return new Promise((resolve, reject) => {
     if (basicAuth.username && basicAuth.password) {
-      resolve({
-        isAuthenticated: true,
-        token: `JWT ${jwt.encode(basicAuth, serverConfig.jwtSecret)}`
+      User.findOne({ username: basicAuth.username }, 'password')
+      .then(user => {
+        if (user && user.password == basicAuth.password) {
+          resolve({
+            isAuthenticated: true,
+            token: `JWT ${jwt.encode(basicAuth, serverConfig.jwtSecret)}`
+          })
+        } else {
+          resolve({
+            isAuthenticated: false
+          })
+        }
       })
     } else {
       resolve({
