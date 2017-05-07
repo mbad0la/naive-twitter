@@ -27,30 +27,30 @@ app.post('/register', (req, res) => {
   log.info('Register', `@${req.body.username}`)
 
   validateRegistration(req.body)
-  .then(feedback => {
-    res.send(JSON.stringify(feedback))
-  })
+    .then(feedback => {
+      res.send(JSON.stringify(feedback))
+    })
 })
 
 app.post('/login', (req, res) => {
   log.info('Login', `@${req.body.username}`)
 
   verifyLogin(req.body)
-  .then(feedback => {
-    res.send(JSON.stringify(feedback))
-  })
+    .then(feedback => {
+      res.send(JSON.stringify(feedback))
+    })
 })
 
 app.post('/validate', (req, res) => {
   let token = req.get('Authorization')
 
   validateToken(token)
-  .then(feedback => {
-    res.send(JSON.stringify(feedback))
-  })
+    .then(feedback => {
+      res.send(JSON.stringify(feedback))
+    })
 })
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile('./index.html', { root: __dirname })
 })
 
