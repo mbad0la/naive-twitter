@@ -6,3 +6,27 @@
 .invalid {
   border: 1px solid red;
 }
+
+.auth_ul {
+  margin: 0px;
+  list-style-type: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth_li {
+  display: inline-block;
+  float: left;
+  margin: 20px;
+}
+
+.auth_li:hover {
+  cursor: pointer;
+}
+
+.authWrapper {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
