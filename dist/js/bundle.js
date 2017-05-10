@@ -41097,6 +41097,7 @@ var App = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      console.log(this.props.authState.isAuthenticated);
       if (this.props.authState.isAuthenticated) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -42368,10 +42369,13 @@ var Profile = function (_Component) {
     value: function follow(event) {
       var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/following/' + this.props.authState.user + '/' + this.props.data.username).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/following/' + this.props.data.username, {}, { headers: { 'Authorization': this.props.authState.token } }).then(function (res) {
         if (res.data.success) {
           localStorage.setItem('postman_naive_twitter_followers', res.data.followers);
           _this2.props.modifyAuthState({ followers: res.data.followers, feed: res.data.feed });
+        } else {
+          localStorage.setItem('postman_naive_twitter_auth', false);
+          _this2.props.modifyAuthState({ isAuthenticated: false });
         }
       });
     }
@@ -42380,10 +42384,13 @@ var Profile = function (_Component) {
     value: function unfollow(event) {
       var _this3 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/following/' + this.props.authState.user + '/' + this.props.data.username).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/following/' + this.props.data.username, { headers: { 'Authorization': this.props.authState.token } }).then(function (res) {
         if (res.data.success) {
           localStorage.setItem('postman_naive_twitter_followers', res.data.followers);
           _this3.props.modifyAuthState({ followers: res.data.followers, feed: res.data.feed });
+        } else {
+          localStorage.setItem('postman_naive_twitter_auth', false);
+          _this3.props.modifyAuthState({ isAuthenticated: false });
         }
       });
     }
@@ -42800,14 +42807,18 @@ var View = function (_Component) {
       var user = localStorage.getItem('postman_naive_twitter_user');
       var followers = localStorage.getItem('postman_naive_twitter_followers') || '[]';
       if (isAuthenticated) {
+        console.log('view will mount in protected mode');
         __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/feed', { headers: { 'Authorization': token } }).then(function (res) {
           if (res.data.isAuthenticated) {
+            console.log('Network authorises too');
             _this2.setState({ token: token, isAuthenticated: isAuthenticated, user: user, followers: followers, feed: res.data.feed });
           } else {
+            console.log('Network feels messy');
             _this2.setState(res.data);
           }
         });
       } else {
+        console.log('view will mount in unprotected mode');
         this.setState({ token: token, isAuthenticated: isAuthenticated, user: user, followers: followers });
       }
     }

@@ -33,15 +33,19 @@ class View extends Component {
     let user = localStorage.getItem('postman_naive_twitter_user')
     let followers = localStorage.getItem('postman_naive_twitter_followers') || '[]'
     if (isAuthenticated) {
+      console.log('view will mount in protected mode')
       axios.get('/api/feed', {headers: {'Authorization': token}})
         .then(res => {
           if (res.data.isAuthenticated) {
+            console.log('Network authorises too')
             this.setState({token, isAuthenticated, user, followers, feed: res.data.feed})
           } else {
+            console.log('Network feels messy')
             this.setState(res.data)
           }
         })
     } else {
+      console.log('view will mount in unprotected mode')
       this.setState({token, isAuthenticated, user, followers})
     }
 

@@ -29,6 +29,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props.authState.isAuthenticated)
     if (this.props.authState.isAuthenticated) {
       return (
         <div className={styles.flex}>

@@ -29,21 +29,27 @@ class Profile extends Component {
   }
 
   follow(event) {
-    axios.put(`/api/following/${this.props.authState.user}/${this.props.data.username}`)
+    axios.put(`/api/following/${this.props.data.username}`, {}, {headers: {'Authorization': this.props.authState.token}})
       .then(res => {
         if (res.data.success) {
           localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
           this.props.modifyAuthState({followers: res.data.followers, feed: res.data.feed})
+        } else {
+          localStorage.setItem('postman_naive_twitter_auth', false)
+          this.props.modifyAuthState({isAuthenticated: false})
         }
       })
   }
 
   unfollow(event) {
-    axios.delete(`/api/following/${this.props.authState.user}/${this.props.data.username}`)
+    axios.delete(`/api/following/${this.props.data.username}`, {headers: {'Authorization': this.props.authState.token}})
       .then(res => {
         if (res.data.success) {
           localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
           this.props.modifyAuthState({followers: res.data.followers, feed: res.data.feed})
+        } else {
+          localStorage.setItem('postman_naive_twitter_auth', false)
+          this.props.modifyAuthState({isAuthenticated: false})
         }
       })
   }
