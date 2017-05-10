@@ -1,9 +1,25 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
+import { TextField, RaisedButton } from 'material-ui'
 import axios from 'axios'
 
 import styles from '../app.css'
+
+const formStyle = {
+  errorStyle: {
+    color: '#ef5b25',
+  },
+  underlineStyle: {
+    borderColor: '#ef5b25',
+  },
+  floatingLabelStyle: {
+    color: '#ef5b25',
+  },
+  floatingLabelFocusStyle: {
+    color: '#ef5b25',
+  }
+}
 
 class Login extends Component {
 
@@ -19,10 +35,13 @@ class Login extends Component {
   }
 
   login(event) {
-    event.preventDefault()
     axios.post('/login', this.state)
       .then(res => {
         console.log(res.data)
+        localStorage.setItem('postman_naive_twitter_token', res.data.token)
+        localStorage.setItem('postman_naive_twitter_auth', res.data.isAuthenticated)
+        localStorage.setItem('postman_naive_twitter_user', res.data.user)
+        localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
         this.props.modifyAuthState(res.data)
       })
   }
@@ -42,15 +61,41 @@ class Login extends Component {
     }
 
     return (
-      <form onSubmit={this.login}>
-        <input type='text' name='username' placeholder='Username' value={this.state.username} onChange={this.handleChange} />
-        <input type='password' name='password' placeholder='Password' value={this.state.password} onChange={this.handleChange} />
-        <input type="submit" value="Submit" />
-      </form>
+      <div className={styles.form}>
+        <TextField
+          name='username'
+          value={this.state.username}
+          onChange={this.handleChange}
+          floatingLabelText='Username'
+          underlineFocusStyle={formStyle.underlineStyle}
+          floatingLabelFocusStyle={formStyle.floatingLabelStyle}
+        />
+        <br />
+        <TextField
+          name='password'
+          value={this.state.password}
+          onChange={this.handleChange}
+          floatingLabelText='Password'
+          type='password'
+          underlineFocusStyle={formStyle.underlineStyle}
+          floatingLabelFocusStyle={formStyle.floatingLabelStyle}
+        />
+        <br />
+        <RaisedButton
+          style={{marginTop: 15}}
+          backgroundColor='#ef5b25'
+          label='LOGIN'
+          labelColor='#ffffff'
+          fullWidth={true}
+          onClick={this.login}
+        />
+      </div>
     )
   }
 
 }
+
+/*<input type='text' name='username' placeholder='Username' value={this.state.username} onChange={this.handleChange} />*/
 
 class Register extends Component {
 
@@ -87,6 +132,8 @@ class Register extends Component {
             errUsername: false,
             errPassword: false
           })
+
+          alert('Successful registration for ' + res.data.user)
         } else {
           let validationFails = {
             errFirstName: false,
@@ -127,13 +174,57 @@ class Register extends Component {
     }
 
     return (
-      <form onSubmit={this.register}>
-        <input type='text' className={this.state.errFirstName? styles.invalid : ''} name='firstName' placeholder='First Name' value={this.state.firstName} onChange={this.handleChange} />
-        <input type='text' className={this.state.errLastName? styles.invalid : ''} name='lastName' placeholder='Last Name' value={this.state.lastName} onChange={this.handleChange} />
-        <input type='text' className={this.state.errUsername? styles.invalid : ''} name='username' placeholder='Username' value={this.state.username} onChange={this.handleChange} />
-        <input type='password' className={this.state.errPassword? styles.invalid : ''} name='password' placeholder='Password' value={this.state.password} onChange={this.handleChange} />
-        <input type="submit" value="Submit" />
-      </form>
+      <div className={styles.form}>
+        <TextField
+          name='firstName'
+          value={this.state.firstName}
+          onChange={this.handleChange}
+          floatingLabelText='First Name'
+          underlineFocusStyle={formStyle.underlineStyle}
+          floatingLabelFocusStyle={formStyle.floatingLabelStyle}
+          errorText={this.state.errFirstName?'Required':null}
+        />
+        <br />
+        <TextField
+          name='lastName'
+          value={this.state.lastName}
+          onChange={this.handleChange}
+          floatingLabelText='Last Name'
+          underlineFocusStyle={formStyle.underlineStyle}
+          floatingLabelFocusStyle={formStyle.floatingLabelStyle}
+          errorText={this.state.errLastName?'Required':null}
+        />
+        <br />
+        <TextField
+          name='username'
+          value={this.state.username}
+          onChange={this.handleChange}
+          floatingLabelText='Username'
+          underlineFocusStyle={formStyle.underlineStyle}
+          floatingLabelFocusStyle={formStyle.floatingLabelStyle}
+          errorText={this.state.errUsername?'Required or Already taken':null}
+        />
+        <br />
+        <TextField
+          name='password'
+          value={this.state.password}
+          onChange={this.handleChange}
+          floatingLabelText='Password'
+          underlineFocusStyle={formStyle.underlineStyle}
+          floatingLabelFocusStyle={formStyle.floatingLabelStyle}
+          type='password'
+          errorText={this.state.errPassword?'Must be more than 6 characters':null}
+        />
+        <br />
+        <RaisedButton
+          style={{marginTop: 15}}
+          backgroundColor='#ef5b25'
+          label='REGISTER'
+          labelColor='#ffffff'
+          fullWidth={true}
+          onClick={this.register}
+        />
+      </div>
     )
   }
 

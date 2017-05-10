@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
 import { Paper, FontIcon, RaisedButton } from 'material-ui'
+import ProfileSearch from './Profiles'
+import ViewWrapper from './View'
 
 import styles from '../app.css'
 
@@ -29,7 +31,18 @@ class App extends Component {
   render() {
     if (this.props.authState.isAuthenticated) {
       return (
-        <div className={styles.bold}>App is authenticated</div>
+        <div className={styles.flex}>
+          <ProfileSearch
+            style={{width: '40%', height: '100%'}}
+            authState={this.props.authState}
+            modifyAuthState={this.props.modifyAuthState}
+          />
+          <ViewWrapper
+            style={{width: '60%', height: '100%'}}
+            authState={this.props.authState}
+            modifyAuthState={this.props.modifyAuthState}
+          />
+        </div>
       )
     } else {
       return (

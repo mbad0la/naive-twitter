@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Redirect, Link, IndexRoute } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import axios from 'axios'
 
 import { App } from './components/App'
 import { Login, Register } from './components/Auth'
@@ -17,10 +18,33 @@ class View extends Component {
     super(props)
     this.state = {
       isAuthenticated: false,
-      token: ''
+      token: undefined,
+      user: undefined,
+      followers: '[]',
+      feed: []
     }
 
     this.setAuthState = this.setAuthState.bind(this)
+  }
+
+  componentWillMount() {
+    let token = localStorage.getItem('postman_naive_twitter_token')
+    let isAuthenticated = localStorage.getItem('postman_naive_twitter_auth') || false
+    let user = localStorage.getItem('postman_naive_twitter_user')
+    let followers = localStorage.getItem('postman_naive_twitter_followers') || '[]'
+    if (isAuthenticated) {
+      axios.get('/api/feed', {headers: {'Authorization': token}})
+        .then(res => {
+          if (res.data.isAuthenticated) {
+            this.setState({token, isAuthenticated, user, followers, feed: res.data.feed})
+          } else {
+            this.setState(res.data)
+          }
+        })
+    } else {
+      this.setState({token, isAuthenticated, user, followers})
+    }
+
   }
 
   setAuthState(newAuthState) {
