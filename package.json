@@ -19,17 +19,17 @@
   },
   "homepage": "https://github.com/mbad0la/naive-twitter#readme",
   "dependencies": {
+    "@material-ui/core": "^4.9.4",
+    "@material-ui/icons": "^4.9.1",
     "axios": "~0.19.2",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
-    "material-ui": "^0.18.0",
     "moment": "^2.18.1",
     "mongoose": "~5.9.1",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "react-router-dom": "^4.1.1",
-    "react-tap-event-plugin": "^2.0.1"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-router-dom": "^5.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

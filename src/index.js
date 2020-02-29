@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route, Redirect, Link, IndexRoute } from 'react-router-dom'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import injectTapEventPlugin from 'react-tap-event-plugin'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios'
 
 import { App } from './components/App'
 import { Login, Register } from './components/Auth'
 
 import styles from './app.css'
-
-injectTapEventPlugin()
 
 class View extends Component {
 
@@ -84,8 +80,6 @@ class NoMatch extends Component {
 
 ReactDOM.render((
   <Router>
-    <MuiThemeProvider>
-      <View />
-    </MuiThemeProvider>
+    <View />
   </Router>
 ), document.getElementById('main'))

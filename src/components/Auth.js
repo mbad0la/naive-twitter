@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
-import { TextField, RaisedButton } from 'material-ui'
+import { Redirect } from 'react-router-dom'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import axios from 'axios'
 
 import styles from '../app.css'
@@ -64,14 +64,29 @@ class Login extends Component {
       <div className={styles.form}>
         <TextField
           name='username'
+          label='Username'
+          value={this.state.username}
+          onChange={this.handleChange}
+          fullWidth={true}
+        />
+        {/* <TextField
+          name='username'
           value={this.state.username}
           onChange={this.handleChange}
           floatingLabelText='Username'
           underlineFocusStyle={formStyle.underlineStyle}
           floatingLabelFocusStyle={formStyle.floatingLabelStyle}
-        />
+        /> */}
         <br />
         <TextField
+          type='password'
+          name='password'
+          label='Password'
+          value={this.state.password}
+          onChange={this.handleChange}
+          fullWidth={true}
+        />
+        {/* <TextField
           name='password'
           value={this.state.password}
           onChange={this.handleChange}
@@ -79,16 +94,24 @@ class Login extends Component {
           type='password'
           underlineFocusStyle={formStyle.underlineStyle}
           floatingLabelFocusStyle={formStyle.floatingLabelStyle}
-        />
+        /> */}
         <br />
-        <RaisedButton
+        <Button 
+          variant='contained' 
+          color='primary'
+          fullWidth={true}
+          onClick={this.login}
+        >
+          Login
+        </Button>
+        {/* <RaisedButton
           style={{marginTop: 15}}
           backgroundColor='#ef5b25'
           label='LOGIN'
           labelColor='#ffffff'
           fullWidth={true}
           onClick={this.login}
-        />
+        /> */}
       </div>
     )
   }
@@ -177,15 +200,29 @@ class Register extends Component {
       <div className={styles.form}>
         <TextField
           name='firstName'
+          label='First Name'
+          value={this.state.firstName}
+          onChange={this.handleChange}
+          fullWidth={true}
+        />
+        {/* <TextField
+          name='firstName'
           value={this.state.firstName}
           onChange={this.handleChange}
           floatingLabelText='First Name'
           underlineFocusStyle={formStyle.underlineStyle}
           floatingLabelFocusStyle={formStyle.floatingLabelStyle}
           errorText={this.state.errFirstName?'Required':null}
-        />
+        /> */}
         <br />
         <TextField
+          name='lastName'
+          label='Last Name'
+          value={this.state.lastName}
+          onChange={this.handleChange}
+          fullWidth={true}
+        />
+        {/* <TextField
           name='lastName'
           value={this.state.lastName}
           onChange={this.handleChange}
@@ -193,9 +230,16 @@ class Register extends Component {
           underlineFocusStyle={formStyle.underlineStyle}
           floatingLabelFocusStyle={formStyle.floatingLabelStyle}
           errorText={this.state.errLastName?'Required':null}
-        />
+        /> */}
         <br />
         <TextField
+          name='username'
+          label='Username'
+          value={this.state.username}
+          onChange={this.handleChange}
+          fullWidth={true}
+        />
+        {/* <TextField
           name='username'
           value={this.state.username}
           onChange={this.handleChange}
@@ -203,9 +247,17 @@ class Register extends Component {
           underlineFocusStyle={formStyle.underlineStyle}
           floatingLabelFocusStyle={formStyle.floatingLabelStyle}
           errorText={this.state.errUsername?'Required or Already taken':null}
-        />
+        /> */}
         <br />
         <TextField
+          type='password'
+          name='password'
+          label='Password'
+          value={this.state.password}
+          onChange={this.handleChange}
+          fullWidth={true}
+        />
+        {/* <TextField
           name='password'
           value={this.state.password}
           onChange={this.handleChange}
@@ -214,16 +266,24 @@ class Register extends Component {
           floatingLabelFocusStyle={formStyle.floatingLabelStyle}
           type='password'
           errorText={this.state.errPassword?'Must be more than 6 characters':null}
-        />
+        /> */}
         <br />
-        <RaisedButton
+        <Button 
+          variant='contained' 
+          color='primary'
+          fullWidth={true}
+          onClick={this.register}
+        >
+          Register
+        </Button>
+        {/* <RaisedButton
           style={{marginTop: 15}}
           backgroundColor='#ef5b25'
           label='REGISTER'
           labelColor='#ffffff'
           fullWidth={true}
           onClick={this.register}
-        />
+        /> */}
       </div>
     )
   }

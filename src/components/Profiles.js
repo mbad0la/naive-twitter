@@ -1,7 +1,18 @@
 import React, { Component } from 'react'
-import { TextField, FlatButton } from 'material-ui'
-import { Card, CardHeader, CardActions } from 'material-ui/Card'
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
 import axios from 'axios'
+
+const useStyles = makeStyles(theme => ({
+  cardDimensions: {
+    width: '80%',
+    margin: '3% 10%'
+  }
+}))
 
 const formStyle = {
   errorStyle: {
@@ -55,17 +66,20 @@ class Profile extends Component {
   }
 
   render() {
+    // const classes = useStyles();
+
     return (
-      <Card style={{width: '80%', margin: '3% 10%'}}>
+      // <Card className={classes.cardDimensions}>
+      <Card>
         <CardHeader
           title={`${this.props.data.firstName} ${this.props.data.lastName}`}
-          subtitle={this.props.data.username}
+          subheader={this.props.data.username}
           avatar={this.props.data.profileImageUrl}
         />
         {
           (this.props.authState.user != this.props.data.username)? (
             <CardActions>
-              {(this.props.follower)?<FlatButton onClick={this.unfollow} secondary={true} label='Unfollow'/>:<FlatButton onClick={this.follow} primary={true} label='Follow'/>}
+              {(this.props.follower)?<Button onClick={this.unfollow} color='secondary'>Unfollow</Button>:<Button onClick={this.follow} color='primary'>Follow</Button>}
             </CardActions>
           ) : undefined
         }
@@ -103,9 +117,8 @@ class ProfileSearch extends Component {
       <div style={this.props.style}>
         <div>
           <TextField
-            style={{width: '80%', margin: '3% 10%'}}
-            hintText='Search by username'
-            underlineFocusStyle={formStyle.underlineStyle}
+            fullWidth={true}
+            label='Search by username'
             onChange={this.searchUsers}
           />
         </div>
