@@ -7,15 +7,13 @@ const userSchema = new Schema({
   password: { type: String, required: true, minlength: 6 },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  profileImageUrl: { type: String, default: '/img/profile_image.jpg' },
   followers: [String]
 })
 
 const postUser = new Schema({
   username: { type: String, required: true },
   firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  profileImageUrl: { type: String, default: '/img/profile_image.jpg' }
+  lastName: { type: String, required: true }
 })
 
 const postSchema = new Schema({
