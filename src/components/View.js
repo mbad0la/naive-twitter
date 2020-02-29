@@ -7,6 +7,7 @@ import Fab from '@material-ui/core/Fab'
 import SendIcon from '@material-ui/icons/Send';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios'
@@ -104,7 +105,7 @@ class Post extends Component {
         <CardHeader
           title={`${this.props.data.user.firstName} ${this.props.data.user.lastName}`}
           subheader={`${this.props.data.user.username} • ${moment(this.props.data.timestamp).fromNow()}`}
-          avatar={this.props.data.user.profileImageUrl}
+          avatar={<Avatar>{this.props.data.user.firstName.substring(0, 1)}</Avatar>}
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">

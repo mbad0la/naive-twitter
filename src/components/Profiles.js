@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
 import CardActions from '@material-ui/core/CardActions';
 import axios from 'axios'
 
@@ -74,7 +75,7 @@ class Profile extends Component {
         <CardHeader
           title={`${this.props.data.firstName} ${this.props.data.lastName}`}
           subheader={this.props.data.username}
-          avatar={this.props.data.profileImageUrl}
+          avatar={<Avatar>{this.props.data.firstName.substring(0, 1)}</Avatar>}
         />
         {
           (this.props.authState.user != this.props.data.username)? (
