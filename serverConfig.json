@@ -1,4 +1,0 @@
-{
-  "jwtSecret": "xxx (better to have a 128-bit string)",
-  "port": 3000
-}

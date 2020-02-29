@@ -8,7 +8,7 @@ const { validateToken, verifyLogin, validateRegistration } = require('./utils')
 const { User, Post } = require('./models')
 
 const app = express()
-const serverConfig = JSON.parse(fs.readFileSync('serverConfig.json').toString())
+const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
 
 
 app.use(bodyParser.json())

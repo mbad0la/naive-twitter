@@ -1,0 +1,5 @@
+{
+  "jwtSecret": "xxx (better to have a 128-bit string)",
+  "port": 3000,
+  "mongoConnectionString": "xxx (get conn. string from your cluster provider)"
+}

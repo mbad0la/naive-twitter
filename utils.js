@@ -5,9 +5,9 @@ const mongoose = require('mongoose')
 
 const { User } = require('./models')
 
-mongoose.connect('mongodb://localhost/postman')
+const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
 
-const serverConfig = JSON.parse(fs.readFileSync('serverConfig.json').toString())
+mongoose.connect(serverConfig.mongoConnectionString)
 
 const validateToken = token => {
   return new Promise((resolve, reject) => {
