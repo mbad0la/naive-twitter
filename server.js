@@ -73,7 +73,7 @@ app.put('/api/following/:destination', (req, res) => {
       if (feedback.isAuthenticated) {
         User.findOne({ username: feedback.user.username })
           .then(doc => {
-            let newFollowing = doc.followers.addToSet([req.params.destination])
+            let newFollowing = doc.followers.addToSet(req.params.destination)
             doc.save((err, doc) => {
               let feed_followers = doc.followers
               feed_followers.push(doc.username)
