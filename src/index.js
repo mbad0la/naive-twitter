@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios'
 
+import Container from '@material-ui/core/Container'
+
 import { App } from './components/App'
 import { Login, Register } from './components/Auth'
 
@@ -55,11 +57,11 @@ function View(props) {
   const modifyAuthState = {setIsAuthenticated, setToken, setUser, setFollowers, setFeed}
 
   return (
-    <div>
+    <Container maxWidth={false}>
       <Route exact path='/' render={() => <App modifyAuthState={modifyAuthState} authState={authState} />} />
       <Route path='/login' render={() => <Login modifyAuthState={modifyAuthState} authState={authState} />} />
       <Route path='/register' render={() => <Register modifyAuthState={modifyAuthState} authState={authState} />} />
-    </div>
+    </Container>
   )
 }
 

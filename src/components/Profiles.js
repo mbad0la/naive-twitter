@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -10,25 +10,10 @@ import axios from 'axios'
 
 const useStyles = makeStyles(theme => ({
   cardDimensions: {
-    width: '80%',
-    margin: '3% 10%'
+    width: '100%',
+    margin: '3% 0%'
   }
 }))
-
-const formStyle = {
-  errorStyle: {
-    color: '#ef5b25',
-  },
-  underlineStyle: {
-    borderColor: '#ef5b25',
-  },
-  floatingLabelStyle: {
-    color: '#ef5b25',
-  },
-  floatingLabelFocusStyle: {
-    color: '#ef5b25',
-  }
-}
 
 function follow(username, token, modifyAuthState) {
   axios.put(`/api/following/${username}`, {}, {headers: {'Authorization': token}})
@@ -104,28 +89,24 @@ function ProfileSearch(props) {
   const {followers} = authState;
 
   return (
-    <div style={style}>
-      <div>
-        <TextField
-          fullWidth={true}
-          label='Search by username'
-          onChange={(e) => searchUsers(e, setMatches)}
-        />
-      </div>
-      <div style={{marginTop: 20}}>
-        {
-          matches.map(match => (
-            <Profile
-              key={match.username}
-              follower={followers.includes(match.username)}
-              data={match}
-              authState={authState}
-              modifyAuthState={modifyAuthState}
-            />
-          ))
-        }
-      </div>
-    </div>
+    <Fragment>
+      <TextField
+        fullWidth={true}
+        label='Search by username'
+        onChange={(e) => searchUsers(e, setMatches)}
+      />
+      {
+        matches.map(match => (
+          <Profile
+            key={match.username}
+            follower={followers.includes(match.username)}
+            data={match}
+            authState={authState}
+            modifyAuthState={modifyAuthState}
+          />
+        ))
+      }
+    </Fragment>
   )
 }
 
