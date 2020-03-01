@@ -35,10 +35,11 @@ function follow(username, token, modifyAuthState) {
     .then(res => {
       if (res.data.success) {
         localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-        modifyAuthState({followers: res.data.followers, feed: res.data.feed})
+        modifyAuthState.setFollowers(res.data.followers)
+        modifyAuthState.setFeed(res.data.feed)
       } else {
         localStorage.setItem('postman_naive_twitter_auth', false)
-        modifyAuthState({isAuthenticated: false})
+        modifyAuthState.setIsAuthenticated(false)
       }
     })
 }
@@ -48,10 +49,11 @@ function unfollow(username, token, modifyAuthState) {
     .then(res => {
       if (res.data.success) {
         localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-        modifyAuthState({followers: res.data.followers, feed: res.data.feed})
+        modifyAuthState.setFollowers(res.data.followers)
+        modifyAuthState.setFeed(res.data.feed)
       } else {
         localStorage.setItem('postman_naive_twitter_auth', false)
-        modifyAuthState({isAuthenticated: false})
+        modifyAuthState.setIsAuthenticated(false)
       }
     })
 }

@@ -26,11 +26,19 @@ function login(payload, modifyAuthState) {
   axios.post('/login', payload)
     .then(res => {
       console.log(res.data)
-      localStorage.setItem('postman_naive_twitter_token', res.data.token)
-      localStorage.setItem('postman_naive_twitter_auth', res.data.isAuthenticated)
-      localStorage.setItem('postman_naive_twitter_user', res.data.user)
-      localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-      modifyAuthState(res.data)
+
+      const {token, isAuthenticated, user, followers, feed} = res.data
+
+      localStorage.setItem('postman_naive_twitter_token', token)
+      localStorage.setItem('postman_naive_twitter_auth', isAuthenticated)
+      localStorage.setItem('postman_naive_twitter_user', user)
+      localStorage.setItem('postman_naive_twitter_followers', followers)
+
+      modifyAuthState.setToken(token)
+      modifyAuthState.setIsAuthenticated(isAuthenticated)
+      modifyAuthState.setUser(user)
+      modifyAuthState.setFollowers(followers)
+      modifyAuthState.setFeed(feed)
     })
 }
 

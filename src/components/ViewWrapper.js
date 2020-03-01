@@ -42,7 +42,7 @@ function createPost(payload, token, modifyAuthState) {
   axios.post('/api/post', payload, {headers: {'Authorization': token}})
     .then(res => {
       if (res.data.success) {
-        modifyAuthState({feed: res.data.feed})
+        modifyAuthState.setFeed(res.data.feed)
       }
     })
 }
@@ -105,6 +105,7 @@ function Post(props) {
 }
 
 function Feed(props) {
+  console.log("feed", props)
   const {authState} = props;
   const {feed} = authState;
 
@@ -136,7 +137,12 @@ function logout(modifyAuthState) {
   localStorage.removeItem('postman_naive_twitter_token')
   localStorage.removeItem('postman_naive_twitter_user')
   localStorage.removeItem('postman_naive_twitter_followers')
-  modifyAuthState({isAuthenticated: false, token: undefined, user: undefined, followers: []})
+
+  modifyAuthState.setToken(null)
+  modifyAuthState.setIsAuthenticated(false)
+  modifyAuthState.setUser(null)
+  modifyAuthState.setFollowers([])
+  modifyAuthState.setFeed([])
 }
 
 function ViewWrapper(props) {

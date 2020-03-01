@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios'
@@ -8,74 +8,59 @@ import { Login, Register } from './components/Auth'
 
 import styles from './app.css'
 
-class View extends Component {
+function View(props) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [token, setToken] = useState(null)
+  const [user, setUser] = useState(null)
+  const [followers, setFollowers] = useState([])
+  const [feed, setFeed] = useState([])
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      isAuthenticated: false,
-      token: undefined,
-      user: undefined,
-      followers: '[]',
-      feed: []
-    }
-
-    this.setAuthState = this.setAuthState.bind(this)
-  }
-
-  componentWillMount() {
+  useEffect(() => {
     let token = localStorage.getItem('postman_naive_twitter_token')
     let isAuthenticated = localStorage.getItem('postman_naive_twitter_auth') || false
     let user = localStorage.getItem('postman_naive_twitter_user')
-    let followers = localStorage.getItem('postman_naive_twitter_followers') || '[]'
+    let followers = localStorage.getItem('postman_naive_twitter_followers') || []
+
     if (isAuthenticated) {
       console.log('view will mount in protected mode')
       axios.get('/api/feed', {headers: {'Authorization': token}})
         .then(res => {
           if (res.data.isAuthenticated) {
             console.log('Network authorises too')
-            this.setState({token, isAuthenticated, user, followers, feed: res.data.feed})
+            setToken(token)
+            setIsAuthenticated(isAuthenticated)
+            setUser(user)
+            setFollowers(followers)
+            setFeed(res.data.feed)
           } else {
-            console.log('Network feels messy')
-            this.setState(res.data)
+            console.log('Network feels messy, authentication sync failed')
+            setToken(null)
+            setIsAuthenticated(false)
+            setUser(null)
+            setFollowers([])
+            setFeed([])
           }
         })
     } else {
       console.log('view will mount in unprotected mode')
-      this.setState({token, isAuthenticated, user, followers})
+      setToken(token)
+      setIsAuthenticated(isAuthenticated)
+      setUser(user)
+      setFollowers(followers)
+      setFeed([])
     }
+  }, [])
 
-  }
+  const authState = {isAuthenticated, token, user, followers, feed}
+  const modifyAuthState = {setIsAuthenticated, setToken, setUser, setFollowers, setFeed}
 
-  setAuthState(newAuthState) {
-    this.setState(newAuthState)
-  }
-
-  render() {
-    return (
-      <div>
-        <Route exact path='/' render={() => <App modifyAuthState={this.setAuthState} authState={this.state} />} />
-        <Route path='/login' render={() => <Login modifyAuthState={this.setAuthState} authState={this.state} />} />
-        <Route path='/register' render={() => <Register modifyAuthState={this.setAuthState} authState={this.state} />} />
-      </div>
-    )
-  }
-
-}
-
-class NoMatch extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
-  render() {
-    return (
-      <div className={styles.bold}>404</div>
-    )
-  }
-
+  return (
+    <div>
+      <Route exact path='/' render={() => <App modifyAuthState={modifyAuthState} authState={authState} />} />
+      <Route path='/login' render={() => <Login modifyAuthState={modifyAuthState} authState={authState} />} />
+      <Route path='/register' render={() => <Register modifyAuthState={modifyAuthState} authState={authState} />} />
+    </div>
+  )
 }
 
 ReactDOM.render((
