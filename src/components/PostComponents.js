@@ -110,8 +110,8 @@ function Feed(props) {
   const {feed} = authState;
 
   return (feed.map(post => (
-    <Grid item xs={12}>
-      <Post key={post._id} data={post}/>
+    <Grid key={post._id} item xs={12}>
+      <Post data={post}/>
     </Grid>
   )))
 }

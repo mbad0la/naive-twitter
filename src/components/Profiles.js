@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -83,31 +83,17 @@ function Profile(props) {
 }
 
 function ProfileSearch(props) {
-  const [matches, setMatches] = useState([])
-
-  const {authState, modifyAuthState, style} = props;
-  const {followers} = authState;
+  const {setMatches} = props;
 
   return (
-    <Fragment>
-      <TextField
-        fullWidth={true}
-        label='Search by username'
-        onChange={(e) => searchUsers(e, setMatches)}
-      />
-      {
-        matches.map(match => (
-          <Profile
-            key={match.username}
-            follower={followers.includes(match.username)}
-            data={match}
-            authState={authState}
-            modifyAuthState={modifyAuthState}
-          />
-        ))
-      }
-    </Fragment>
+    <TextField
+      type='search'
+      variant='outlined'
+      fullWidth={true}
+      label='Search'
+      onChange={(e) => searchUsers(e, setMatches)}
+    />
   )
 }
 
-export default ProfileSearch
+export {ProfileSearch, Profile}
