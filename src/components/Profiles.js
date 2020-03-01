@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -66,9 +66,9 @@ function searchUsers(event, setMatches) {
 }
 
 function Profile(props) {
-  const { data, authState, follower, modifyAuthState } = props;
-  const { firstName, lastName, username } = data;
-  const { user, token } = authState;
+  const {data, authState, follower, modifyAuthState} = props;
+  const {firstName, lastName, username} = data;
+  const {user, token} = authState;
 
   const classes = useStyles();
     

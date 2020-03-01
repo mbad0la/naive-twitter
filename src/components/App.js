@@ -4,7 +4,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Button from '@material-ui/core/Button'
 import ProfileSearch from './Profiles'
-import ViewWrapper from './View'
+import ViewWrapper from './ViewWrapper'
 
 import styles from '../app.css'
 
