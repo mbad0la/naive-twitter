@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -30,116 +30,101 @@ const formStyle = {
   }
 }
 
-class Profile extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {}
-
-    this.follow = this.follow.bind(this)
-    this.unfollow = this.unfollow.bind(this)
-  }
-
-  follow(event) {
-    axios.put(`/api/following/${this.props.data.username}`, {}, {headers: {'Authorization': this.props.authState.token}})
-      .then(res => {
-        if (res.data.success) {
-          localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-          this.props.modifyAuthState({followers: res.data.followers, feed: res.data.feed})
-        } else {
-          localStorage.setItem('postman_naive_twitter_auth', false)
-          this.props.modifyAuthState({isAuthenticated: false})
-        }
-      })
-  }
-
-  unfollow(event) {
-    axios.delete(`/api/following/${this.props.data.username}`, {headers: {'Authorization': this.props.authState.token}})
-      .then(res => {
-        if (res.data.success) {
-          localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-          this.props.modifyAuthState({followers: res.data.followers, feed: res.data.feed})
-        } else {
-          localStorage.setItem('postman_naive_twitter_auth', false)
-          this.props.modifyAuthState({isAuthenticated: false})
-        }
-      })
-  }
-
-  render() {
-    // const classes = useStyles();
-
-    return (
-      // <Card className={classes.cardDimensions}>
-      <Card>
-        <CardHeader
-          title={`${this.props.data.firstName} ${this.props.data.lastName}`}
-          subheader={this.props.data.username}
-          avatar={<Avatar>{this.props.data.firstName.substring(0, 1)}</Avatar>}
-        />
-        {
-          (this.props.authState.user != this.props.data.username)? (
-            <CardActions>
-              {(this.props.follower)?<Button onClick={this.unfollow} color='secondary'>Unfollow</Button>:<Button onClick={this.follow} color='primary'>Follow</Button>}
-            </CardActions>
-          ) : undefined
-        }
-
-      </Card>
-    )
-  }
-
+function follow(username, token, modifyAuthState) {
+  axios.put(`/api/following/${username}`, {}, {headers: {'Authorization': token}})
+    .then(res => {
+      if (res.data.success) {
+        localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
+        modifyAuthState({followers: res.data.followers, feed: res.data.feed})
+      } else {
+        localStorage.setItem('postman_naive_twitter_auth', false)
+        modifyAuthState({isAuthenticated: false})
+      }
+    })
 }
 
-class ProfileSearch extends Component {
+function unfollow(username, token, modifyAuthState) {
+  axios.delete(`/api/following/${username}`, {headers: {'Authorization': token}})
+    .then(res => {
+      if (res.data.success) {
+        localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
+        modifyAuthState({followers: res.data.followers, feed: res.data.feed})
+      } else {
+        localStorage.setItem('postman_naive_twitter_auth', false)
+        modifyAuthState({isAuthenticated: false})
+      }
+    })
+}
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      matches: []
-    }
-
-    this.searchUsers = this.searchUsers.bind(this)
+function searchUsers(event, setMatches) {
+  if (event.target.value.length%2 == 1) {
+    axios.get(`/api/profiles/${event.target.value}`)
+      .then(res => {
+        setMatches(res.data)
+      })
   }
+}
 
-  searchUsers(event) {
-    if (event.target.value.length%2 == 1) {
-      axios.get(`/api/profiles/${event.target.value}`)
-        .then(res => {
-          this.setState({matches: res.data})
-        })
-    }
-  }
+function Profile(props) {
+  const { data, authState, follower, modifyAuthState } = props;
+  const { firstName, lastName, username } = data;
+  const { user, token } = authState;
 
-  render() {
-    let followers = JSON.parse(this.props.authState.followers)
+  const classes = useStyles();
+    
+  return (
+    <Card className={classes.cardDimensions}>
+      <CardHeader
+        title={`${firstName} ${lastName}`}
+        subheader={username}
+        avatar={<Avatar>{firstName.substring(0, 1)}</Avatar>}
+      />
+      {
+        (user != username)? (
+          <CardActions>
+            {
+              (follower) ?
+                <Button onClick={() => unfollow(username, token, modifyAuthState)} color='secondary'>Unfollow</Button>
+                : <Button onClick={() => follow(username, token, modifyAuthState)} color='primary'>Follow</Button>
+            }
+          </CardActions>
+        ) : undefined
+      }
 
-    return (
-      <div style={this.props.style}>
-        <div>
-          <TextField
-            fullWidth={true}
-            label='Search by username'
-            onChange={this.searchUsers}
-          />
-        </div>
-        <div style={{marginTop: 20}}>
-          {
-            this.state.matches.map(match => (
-              <Profile
-                key={match.username}
-                follower={followers.includes(match.username)}
-                data={match}
-                authState={this.props.authState}
-                modifyAuthState={this.props.modifyAuthState}
-              />
-            ))
-          }
-        </div>
+    </Card>
+  )
+}
+
+function ProfileSearch(props) {
+  const [matches, setMatches] = useState([])
+
+  const {authState, modifyAuthState, style} = props;
+  const {followers} = authState;
+
+  return (
+    <div style={style}>
+      <div>
+        <TextField
+          fullWidth={true}
+          label='Search by username'
+          onChange={(e) => searchUsers(e, setMatches)}
+        />
       </div>
-    )
-  }
-
+      <div style={{marginTop: 20}}>
+        {
+          matches.map(match => (
+            <Profile
+              key={match.username}
+              follower={followers.includes(match.username)}
+              data={match}
+              authState={authState}
+              modifyAuthState={modifyAuthState}
+            />
+          ))
+        }
+      </div>
+    </div>
+  )
 }
 
 export default ProfileSearch
