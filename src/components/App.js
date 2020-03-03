@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Avatar from '@material-ui/core/Avatar'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
@@ -16,10 +17,25 @@ const useStyles = makeStyles(theme => ({
   feedMargin: {
     marginTop: theme.spacing(2)
   },
+  relativeWrapper: {
+    position: 'relative'
+  },
   guestScreenRoot: {
     position: 'absolute',
+    top: 0,
+    left: 0,
     height: '100%',
     width: '100%'
+  },
+  reAuthAvatarSize: {
+    width: theme.spacing(7),
+    height: theme.spacing(7)
+  },
+  progress: {
+    position: 'absolute',
+    top: -6,
+    left: -6,
+    zIndex: 1,
   },
   guestScreenButton: {
     margin: theme.spacing(2)
@@ -36,7 +52,10 @@ function App(props) {
   if (authState.isAuthenticated && !authState.serverAuthorised) {
     return (
       <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
-        <CircularProgress />
+        <div className={classes.relativeWrapper}>
+          <Avatar className={classes.reAuthAvatarSize}><MeetingRoomIcon /></Avatar>
+          <CircularProgress size={68} className={classes.progress}/>
+        </div>
       </Grid>
     )
   }

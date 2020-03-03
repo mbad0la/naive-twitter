@@ -23,20 +23,21 @@ function View(props) {
             console.log('Network authorises too')
             setTimeout(() => {
               setToken(token)
-              setIsAuthenticated(true)
               setUser(user)
               setFollowers(followers)
               setFeed(res.data.feed)
               setServerAuthorised(true)
-            }, 1000)
+            }, 1500)
           } else {
             console.log('Network feels messy, authentication sync failed')
-            setServerAuthorised(false)
-            setToken(null)
-            setIsAuthenticated(false)
-            setUser(null)
-            setFollowers([])
-            setFeed([])
+            setTimeout(() => {
+              setServerAuthorised(false)
+              setToken(null)
+              setIsAuthenticated(false)
+              setUser(null)
+              setFollowers([])
+              setFeed([])
+            }, 1500)
           }
         })
     } else {
