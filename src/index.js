@@ -3,39 +3,35 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios'
 
-import Container from '@material-ui/core/Container'
-
 import { App } from './components/App'
 import { Login, Register } from './components/Auth'
 
-import styles from './app.css'
-
 function View(props) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [token, setToken] = useState(null)
-  const [user, setUser] = useState(null)
-  const [followers, setFollowers] = useState([])
+  const [serverAuthorised, setServerAuthorised] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('postman_naive_twitter_auth') || false)
+  const [token, setToken] = useState(localStorage.getItem('postman_naive_twitter_token'))
+  const [user, setUser] = useState(localStorage.getItem('postman_naive_twitter_user'))
+  const [followers, setFollowers] = useState(localStorage.getItem('postman_naive_twitter_followers') || [])
   const [feed, setFeed] = useState([])
 
   useEffect(() => {
-    let token = localStorage.getItem('postman_naive_twitter_token')
-    let isAuthenticated = localStorage.getItem('postman_naive_twitter_auth') || false
-    let user = localStorage.getItem('postman_naive_twitter_user')
-    let followers = localStorage.getItem('postman_naive_twitter_followers') || []
-
     if (isAuthenticated) {
       console.log('view will mount in protected mode')
       axios.get('/api/feed', {headers: {'Authorization': token}})
         .then(res => {
           if (res.data.isAuthenticated) {
             console.log('Network authorises too')
-            setToken(token)
-            setIsAuthenticated(isAuthenticated)
-            setUser(user)
-            setFollowers(followers)
-            setFeed(res.data.feed)
+            setTimeout(() => {
+              setToken(token)
+              setIsAuthenticated(true)
+              setUser(user)
+              setFollowers(followers)
+              setFeed(res.data.feed)
+              setServerAuthorised(true)
+            }, 1000)
           } else {
             console.log('Network feels messy, authentication sync failed')
+            setServerAuthorised(false)
             setToken(null)
             setIsAuthenticated(false)
             setUser(null)
@@ -53,15 +49,15 @@ function View(props) {
     }
   }, [])
 
-  const authState = {isAuthenticated, token, user, followers, feed}
-  const modifyAuthState = {setIsAuthenticated, setToken, setUser, setFollowers, setFeed}
+  const authState = {isAuthenticated, serverAuthorised, token, user, followers, feed}
+  const modifyAuthState = {setIsAuthenticated, setToken, setUser, setFollowers, setFeed, setServerAuthorised}
 
   return (
-    <Container maxWidth={false}>
+    <React.Fragment>
       <Route exact path='/' render={() => <App modifyAuthState={modifyAuthState} authState={authState} />} />
       <Route path='/login' render={() => <Login modifyAuthState={modifyAuthState} authState={authState} />} />
       <Route path='/register' render={() => <Register modifyAuthState={modifyAuthState} authState={authState} />} />
-    </Container>
+    </React.Fragment>
   )
 }
 

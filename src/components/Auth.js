@@ -1,25 +1,22 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import axios from 'axios'
 
-import styles from '../app.css'
+import { makeStyles } from '@material-ui/core/styles'
 
-const formStyle = {
-  errorStyle: {
-    color: '#ef5b25',
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%'
   },
-  underlineStyle: {
-    borderColor: '#ef5b25',
-  },
-  floatingLabelStyle: {
-    color: '#ef5b25',
-  },
-  floatingLabelFocusStyle: {
-    color: '#ef5b25',
+  marginTop: {
+    marginTop: theme.spacing(2)
   }
-}
+}))
 
 
 function login(payload, modifyAuthState) {
@@ -39,6 +36,8 @@ function login(payload, modifyAuthState) {
       modifyAuthState.setUser(user)
       modifyAuthState.setFollowers(followers)
       modifyAuthState.setFeed(feed)
+      modifyAuthState.setServerAuthorised(true)
+
     })
 }
 
@@ -87,10 +86,12 @@ function register(event, payload, modifiers) {
 
 
 function Login(props) {
-  const [ username, setUsername ] = useState('');
-  const [ password, setPassword ] = useState('');
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
 
-  const { authState, modifyAuthState } = props;
+  const { authState, modifyAuthState } = props
+
+  const classes = useStyles()
 
   if (authState.isAuthenticated) {
     return (
@@ -102,31 +103,37 @@ function Login(props) {
   }
 
   return (
-    <div className={styles.form}>
-      <TextField
-        label='Username'
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        fullWidth={true}
-      />
-      <br />
-      <TextField
-        type='password'
-        label='Password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        fullWidth={true}
-      />
-      <br />
-      <Button 
-        variant='contained' 
-        color='primary'
-        fullWidth={true}
-        onClick={() => login({username, password}, modifyAuthState)}
-      >
-        Login
-      </Button>
-    </div>
+    <Grid container className={classes.root} justify='center' alignItems='center'>
+      <Grid container item xs={8} md={3} direction='column'>
+        <Grid item xs={12} className={classes.marginTop}>
+          <TextField
+            label='Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            fullWidth={true}
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.marginTop}>
+          <TextField
+            type='password'
+            label='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth={true}
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.marginTop}>
+          <Button
+            variant='contained' 
+            color='primary'
+            fullWidth={true}
+            onClick={() => login({username, password}, modifyAuthState)}
+          >
+            Login
+          </Button>
+        </Grid>
+      </Grid>
+    </Grid>
   )
 }
 
@@ -141,7 +148,9 @@ function Register(props) {
   const [errPassword, setErrPassword] = useState(false)
 
   
-  const {authState} = props;
+  const {authState} = props
+
+  const classes = useStyles()
 
   if (authState.isAuthenticated) {
     return (
@@ -153,45 +162,54 @@ function Register(props) {
   }
 
   return (
-    <div className={styles.form}>
-      <TextField
-        label='First Name'
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        fullWidth={true}
-      />
-      <br />
-      <TextField
-        label='Last Name'
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        fullWidth={true}
-      />
-      <br />
-      <TextField
-        label='Username'
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        fullWidth={true}
-      />
-      <br />
-      <TextField
-        type='password'
-        label='Password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        fullWidth={true}
-      />
-      <br />
-      <Button 
-        variant='contained' 
-        color='primary'
-        fullWidth={true}
-        onClick={(e) => register(e, {firstName, lastName, username, password}, {setFirstName, setLastName, setUsername, setPassword, setErrFirstName, setErrLastName, setErrPassword, setErrUsername})}
-      >
-        Register
-      </Button>
-    </div>
+    <Grid container className={classes.root} justify='center' alignItems='center'>
+      <Grid container item xs={8} md={3} direction='column'>
+        <Grid item xs={12} className={classes.marginTop}>
+          <TextField
+            label='First Name'
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            fullWidth={true}
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.marginTop}>
+          <TextField
+            label='Last Name'
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            fullWidth={true}
+          />         
+        </Grid>
+        <Grid item xs={12} className={classes.marginTop}>
+          <TextField
+            label='Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            fullWidth={true}
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.marginTop}>
+          <TextField
+            type='password'
+            label='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth={true}
+          />        
+        </Grid>
+        <Grid item xs={12} className={classes.marginTop}>
+          <Button 
+            className={classes.button}
+            variant='contained' 
+            color='primary'
+            fullWidth={true}
+            onClick={(e) => register(e, {firstName, lastName, username, password}, {setFirstName, setLastName, setUsername, setPassword, setErrFirstName, setErrLastName, setErrPassword, setErrUsername})}
+          >
+            Register
+          </Button>
+        </Grid>
+      </Grid>
+    </Grid>
   )
 }
 

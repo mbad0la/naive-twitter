@@ -1,20 +1,28 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Header from './Header'
 import {Profile} from './Profiles'
 import {PostMaker, Feed} from './PostComponents'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import styles from '../app.css'
-
 const useStyles = makeStyles(theme => ({
   feedMargin: {
     marginTop: theme.spacing(2)
+  },
+  guestScreenRoot: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%'
+  },
+  guestScreenButton: {
+    margin: theme.spacing(2)
   }
 }))
 
@@ -25,9 +33,17 @@ function App(props) {
 
   const classes = useStyles()
 
+  if (authState.isAuthenticated && !authState.serverAuthorised) {
+    return (
+      <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
+        <CircularProgress />
+      </Grid>
+    )
+  }
+
   if (authState.isAuthenticated) {
     return (
-      <React.Fragment>
+      <Container maxWidth={false}>
         <Header modifyAuthState={modifyAuthState} setMatches={setMatches}/>
         <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
@@ -53,36 +69,30 @@ function App(props) {
             </Grid>
           </Grid>
         </Grid>
-      </React.Fragment>
+      </Container>
     )
   } else {
     return (
-      <div className={styles.authWrapper}>
-        <ul className={styles.auth_ul}>
-          <li className={styles.auth_li}>
-            <Link to='/login'>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<MeetingRoomIcon />}
-              >
-                Login
-              </Button>
-            </Link>
-          </li>
-          <li className={styles.auth_li}>
-            <Link to='/register'>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<PersonAddIcon />}
-              >
-                Register
-              </Button>
-            </Link>
-          </li>
-        </ul>
-      </div>
+      <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
+        <Link to='/login'>
+          <Button
+            className={classes.guestScreenButton}
+            variant="contained"
+            color="primary"
+          >
+            <MeetingRoomIcon />
+          </Button>
+        </Link>
+        <Link to='/register'>
+          <Button
+            className={classes.guestScreenButton}
+            variant="contained"
+            color="primary"
+          >
+            <PersonAddIcon />
+          </Button>
+        </Link>
+      </Grid>
     )
   }
 }
