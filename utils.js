@@ -1,21 +1,16 @@
 const fs = require('fs')
 
 const jwt = require('jwt-simple')
-const mongoose = require('mongoose')
 
 const { User } = require('./models')
 
-const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
-
-mongoose.connect(serverConfig.mongoConnectionString)
-
-const validateToken = token => {
+const validateToken = (token, key) => {
   return new Promise((resolve, reject) => {
     if (token) {
       try {
         let tokenArgs = token.split(' ')
         if (tokenArgs[0] == 'JWT') {
-          const credentials = jwt.decode(tokenArgs[1], serverConfig.jwtSecret)
+          const credentials = jwt.decode(tokenArgs[1], key)
           User.findOne({ username: credentials.username })
           .then(user => {
             if (user && user.password == credentials.password) {
@@ -36,7 +31,7 @@ const validateToken = token => {
   })
 }
 
-const verifyLogin = basicAuth => {
+const verifyLogin = (basicAuth, key) => {
   return new Promise((resolve, reject) => {
     if (basicAuth.username && basicAuth.password) {
       User.findOne({ username: basicAuth.username }, 'password followers')
@@ -44,7 +39,7 @@ const verifyLogin = basicAuth => {
         if (user && user.password == basicAuth.password) {
           resolve({
             isAuthenticated: true,
-            token: `JWT ${jwt.encode(basicAuth, serverConfig.jwtSecret)}`,
+            token: `JWT ${jwt.encode(basicAuth, key)}`,
             user: basicAuth.username,
             followers: JSON.stringify(user.followers)
           })

@@ -1,5 +1,5 @@
 {
-  "jwtSecret": "xxx (better to have a 128-bit string)",
-  "port": 3000,
-  "mongoConnectionString": "xxx (get conn. string from your cluster provider)"
+  "port": 80,
+  "awsRegion": "us-west-2",
+  "secretId": "github-projects/naive-twitter"
 }
