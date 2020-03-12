@@ -4,4 +4,4 @@
 cd /home/ubuntu/naive-twitter
 
 # Start application
-pm2 start server.js --name "naive-twitter"
+pm2 start server.js --name "app"
