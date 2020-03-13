@@ -43,7 +43,7 @@ function login(payload, modifyAuthState) {
     })
 }
 
-function register(event, payload, modifiers) {
+function register(event, payload, modifiers, modifyAuthState) {
   event.preventDefault()
 
   const {
@@ -60,16 +60,15 @@ function register(event, payload, modifiers) {
   axios.post('/register', payload)
     .then(res => {
       if (res.data.success) {
-        setFirstName('');
-        setLastName('');
-        setPassword('');
-        setUsername('');
-        setErrFirstName(false);
-        setErrLastName(false);
-        setErrPassword(false);
-        setErrUsername(false);
+        modifyAuthState.setIsAuthenticated(true);
+        modifyAuthState.setServerAuthorised(false);
 
-        alert('Successful registration for ' + res.data.user)
+        const loginPayload = {
+          username: payload.username,
+          password: payload.password
+        }
+
+        login(loginPayload, modifyAuthState)
       } else {
         res.data.errors.forEach(error => {
           if (error == 'firstName') {
@@ -150,7 +149,7 @@ function Register(props) {
   const [errPassword, setErrPassword] = useState(false)
 
   
-  const {authState} = props
+  const {authState, modifyAuthState} = props
 
   const classes = useStyles()
 
@@ -162,6 +161,8 @@ function Register(props) {
       }}/>
     )
   }
+
+  const modifiers = { setFirstName, setLastName, setUsername, setPassword, setErrFirstName, setErrLastName, setErrPassword, setErrUsername }
 
   return (
     <Grid container className={classes.root} justify='center' alignItems='center'>
@@ -205,7 +206,7 @@ function Register(props) {
             variant='contained' 
             color='primary'
             fullWidth={true}
-            onClick={(e) => register(e, {firstName, lastName, username, password}, {setFirstName, setLastName, setUsername, setPassword, setErrFirstName, setErrLastName, setErrPassword, setErrUsername})}
+            onClick={(e) => register(e, {firstName, lastName, username, password}, modifiers, modifyAuthState)}
           >
             Register
           </Button>
