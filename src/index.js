@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios'
 
 import { App } from './components/App'
-import { Login, Register } from './components/Auth'
+import Login from './components/Login'
+import Register from './components/Register'
 
 function View(props) {
   const [serverAuthorised, setServerAuthorised] = useState(false)
