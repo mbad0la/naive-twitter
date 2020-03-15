@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#56CCF2'
   },
   planeProperties: {
-    width: '20vh',
+    height: '10vh',
     transform: 'translatey(0px)',
     animation: `$float 1.2s ease-in-out infinite`
   },
