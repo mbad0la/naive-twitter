@@ -1,12 +1,17 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField'
+import React, { useContext } from 'react'
+
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import CardActions from '@material-ui/core/CardActions';
+import CardHeader from '@material-ui/core/CardHeader';
+import TextField from '@material-ui/core/TextField'
+
+import { makeStyles } from '@material-ui/core/styles';
+
 import axios from 'axios'
+
+import { AuthContext } from '../AuthContext'
 
 const useStyles = makeStyles(theme => ({
   cardDimensions: {
@@ -15,30 +20,32 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function follow(username, token, modifyAuthState) {
-  axios.put(`/api/following/${username}`, {}, {headers: {'Authorization': token}})
+function follow(username, authContext, setFeed) {
+  axios.put(`/api/following/${username}`, {}, { headers: { 'Authorization': authContext.token } })
     .then(res => {
       if (res.data.success) {
         localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-        modifyAuthState.setFollowers(res.data.followers)
-        modifyAuthState.setFeed(res.data.feed)
+        authContext.setFollowers(res.data.followers)
+        setFeed(res.data.feed)
       } else {
         localStorage.setItem('postman_naive_twitter_auth', false)
-        modifyAuthState.setIsAuthenticated(false)
+        authContext.setClientAuthFlag(false)
+        authContext.setServerAuthFlag(false)
       }
     })
 }
 
-function unfollow(username, token, modifyAuthState) {
-  axios.delete(`/api/following/${username}`, {headers: {'Authorization': token}})
+function unfollow(username, authContext, setFeed) {
+  axios.delete(`/api/following/${username}`, { headers: { 'Authorization': authContext.token } })
     .then(res => {
       if (res.data.success) {
         localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-        modifyAuthState.setFollowers(res.data.followers)
-        modifyAuthState.setFeed(res.data.feed)
+        authContext.setFollowers(res.data.followers)
+        setFeed(res.data.feed)
       } else {
         localStorage.setItem('postman_naive_twitter_auth', false)
-        modifyAuthState.setIsAuthenticated(false)
+        authContext.setClientAuthFlag(false)
+        authContext.setServerAuthFlag(false)
       }
     })
 }
@@ -53,9 +60,9 @@ function searchUsers(event, setMatches) {
 }
 
 function Profile(props) {
-  const {data, authState, follower, modifyAuthState} = props;
-  const {firstName, lastName, username} = data;
-  const {user, token} = authState;
+  const authContext = useContext(AuthContext)
+  const { data, follower, modifyAuthState} = props;
+  const { firstName, lastName, username } = data;
 
   const classes = useStyles();
     
@@ -67,12 +74,12 @@ function Profile(props) {
         avatar={<Avatar>{firstName.substring(0, 1)}</Avatar>}
       />
       {
-        (user != username)? (
+        (authContext.user !== username) ? (
           <CardActions>
             {
               (follower) ?
-                <Button onClick={() => unfollow(username, token, modifyAuthState)} color='secondary'>Unfollow</Button>
-                : <Button onClick={() => follow(username, token, modifyAuthState)} color='primary'>Follow</Button>
+                <Button onClick={() => unfollow(username, authContext, modifyAuthState.setFeed)} color='secondary'>Unfollow</Button>
+                : <Button onClick={() => follow(username, authContext, modifyAuthState.setFeed)} color='primary'>Follow</Button>
             }
           </CardActions>
         ) : undefined

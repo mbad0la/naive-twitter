@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 
 import { Redirect } from 'react-router-dom'
 
@@ -12,8 +12,8 @@ import axios from 'axios'
 
 import { login } from './Login'
 
+import { AuthContext } from '../AuthContext';
 import { useControlledInput } from '../hooks'
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,19 +31,19 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function register(event, payload, modifyAuthState) {
+function register(event, payload, authContext, setFeed) {
   axios.post('/register', payload)
     .then(res => {
       if (res.data.success) {
-        modifyAuthState.setIsAuthenticated(true);
-        modifyAuthState.setServerAuthorised(false);
+        authContext.setClientAuthFlag(true);
+        authContext.setServerAuthFlag(false);
 
         const loginPayload = {
           username: payload.username,
           password: payload.password
         }
 
-        login(loginPayload, modifyAuthState)
+        login(loginPayload, authContext, setFeed)
       } else {
         // no-op
       }
@@ -51,12 +51,13 @@ function register(event, payload, modifyAuthState) {
 }
 
 function Register(props) {
+  const authContext = useContext(AuthContext)
   const firstName = useControlledInput('')
   const lastName = useControlledInput('')
   const username = useControlledInput('')
   const password = useControlledInput('')
   
-  const { authState, modifyAuthState } = props
+  const { modifyAuthState } = props
 
   const classes = useStyles()
 
@@ -67,7 +68,7 @@ function Register(props) {
     password: password.value
   }
 
-  if (authState.isAuthenticated) {
+  if (authContext.clientAuthFlag) {
     return (
       <Redirect to={{
         pathname: '/',
@@ -114,7 +115,7 @@ function Register(props) {
             variant='contained' 
             color='primary'
             fullWidth={true}
-            onClick={(e) => register(e, payload, modifyAuthState)}
+            onClick={(e) => register(e, payload, authContext, modifyAuthState.setFeed)}
           >
             Register
           </Button>

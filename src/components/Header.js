@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import {ProfileSearch} from './Profiles'
+import { ProfileSearch } from './Profiles'
+
+import { AuthContext } from '../AuthContext'
 
 const useStyles = makeStyles(theme => ({
   headerRoot: {
@@ -17,21 +19,27 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function logout(modifyAuthState) {
+function logout(authContext, setFeed) {
+  const { setClientAuthFlag, setServerAuthFlag, setToken, setUser, setFollowers } = authContext
+
+  setServerAuthFlag(false)
+
   localStorage.removeItem('postman_naive_twitter_auth')
   localStorage.removeItem('postman_naive_twitter_token')
   localStorage.removeItem('postman_naive_twitter_user')
   localStorage.removeItem('postman_naive_twitter_followers')
 
-  modifyAuthState.setToken(null)
-  modifyAuthState.setIsAuthenticated(false)
-  modifyAuthState.setUser(null)
-  modifyAuthState.setFollowers([])
-  modifyAuthState.setFeed([])
+  setToken(null)
+  setUser(null)
+  setFollowers([])
+  setFeed([])
+
+  setClientAuthFlag(false)
 }
 
 function Header(props) {
-  const {modifyAuthState, setMatches} = props
+  const authContext = useContext(AuthContext)
+  const { modifyAuthState, setMatches } = props
 
   const classes = useStyles()
 
@@ -47,7 +55,7 @@ function Header(props) {
         <Button
           size='medium'
           color='secondary'
-          onClick={() => logout(modifyAuthState)}
+          onClick={() => logout(authContext, modifyAuthState.setFeed)}
         >
           Sign Out
         </Button>

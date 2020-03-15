@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField'
-import Paper from '@material-ui/core/Paper'
+import React, { useState, useContext } from 'react'
+
+import Avatar from '@material-ui/core/Avatar'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
 import Fab from '@material-ui/core/Fab'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
 import SendIcon from '@material-ui/icons/Send';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
-import CardContent from '@material-ui/core/CardContent';
+import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+
+import { makeStyles } from '@material-ui/core/styles';
+
 import axios from 'axios'
 import moment from 'moment'
+
+import { AuthContext } from '../AuthContext'
 
 const useStyles = makeStyles(theme => ({
   post: {
@@ -35,20 +40,20 @@ function update(event, setContent) {
   }
 }
 
-function createPost(payload, token, modifyAuthState) {
+function createPost(payload, token, setFeed) {
   axios.post('/api/post', payload, {headers: {'Authorization': token}})
     .then(res => {
       if (res.data.success) {
-        modifyAuthState.setFeed(res.data.feed)
+        setFeed(res.data.feed)
       }
     })
 }
 
 function PostMaker(props) {
+  const { token } = useContext(AuthContext)
   const [content, setContent] = useState('');
 
-  const {authState, modifyAuthState} = props;
-  const {token} = authState;
+  const { modifyAuthState } = props;
 
   const classes = useStyles();
   
@@ -68,7 +73,7 @@ function PostMaker(props) {
             size='small'
             color='primary'
             aria-label='publish'
-            onClick={() => createPost({content}, token, modifyAuthState)}
+            onClick={() => createPost({ content }, token, modifyAuthState.setFeed)}
           >
             <SendIcon />
           </Fab>
@@ -83,9 +88,9 @@ function PostMaker(props) {
 }
 
 function Post(props) {
-  const {data} = props;
-  const {user, timestamp, content} = data;
-  const {firstName, lastName, username} = user;
+  const { data } = props;
+  const { user, timestamp, content } = data;
+  const { firstName, lastName, username } = user;
 
   const classes = useStyles();
     
@@ -106,8 +111,8 @@ function Post(props) {
 }
 
 function Feed(props) {
-  const {authState} = props;
-  const {feed} = authState;
+  const { authState } = props;
+  const { feed } = authState;
 
   return (feed.map(post => (
     <Grid key={post._id} item xs={12}>
@@ -116,4 +121,4 @@ function Feed(props) {
   )))
 }
 
-export {PostMaker, Feed}
+export { PostMaker, Feed }

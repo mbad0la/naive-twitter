@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+
 import { Link } from 'react-router-dom'
+
 import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Header from './Header'
-import {Profile} from './Profiles'
-import {PostMaker, Feed} from './PostComponents'
 
 import { makeStyles } from '@material-ui/core/styles'
+
+import Header from './Header'
+import { Profile } from './Profiles'
+import { Feed, PostMaker } from './PostComponents'
+
+import { AuthContext } from '../AuthContext'
 
 const useStyles = makeStyles(theme => ({
   feedMargin: {
@@ -45,11 +50,11 @@ const useStyles = makeStyles(theme => ({
 function App(props) {
   const [matches, setMatches] = useState([])
   const { authState, modifyAuthState } = props
-  const {followers} = authState
+  const { clientAuthFlag, serverAuthFlag, followers } = useContext(AuthContext)
 
   const classes = useStyles()
 
-  if (authState.isAuthenticated && !authState.serverAuthorised) {
+  if (clientAuthFlag && !serverAuthFlag) {
     return (
       <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
         <div className={classes.relativeWrapper}>
@@ -60,7 +65,7 @@ function App(props) {
     )
   }
 
-  if (authState.isAuthenticated) {
+  if (clientAuthFlag) {
     return (
       <Container maxWidth={false}>
         <Header modifyAuthState={modifyAuthState} setMatches={setMatches}/>
@@ -116,4 +121,4 @@ function App(props) {
   }
 }
 
-export { App }
+export default App

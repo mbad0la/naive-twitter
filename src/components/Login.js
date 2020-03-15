@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { Redirect } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import axios from 'axios'
 
+import { AuthContext } from '../AuthContext'
 import { useControlledInput } from '../hooks'
 
 const useStyles = makeStyles(theme => ({
@@ -29,30 +30,32 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function login(payload, modifyAuthState) {
+function login(payload, authContext, setFeed) {
   axios.post('/login', payload)
     .then(res => {
-      const { token, isAuthenticated, user, followers, feed } = res.data
+      const { setClientAuthFlag, setServerAuthFlag, setToken, setUser, setFollowers } = authContext
+      const { token, user, followers, feed } = res.data
+
+      setClientAuthFlag(true)
 
       localStorage.setItem('postman_naive_twitter_token', token)
-      localStorage.setItem('postman_naive_twitter_auth', isAuthenticated)
+      localStorage.setItem('postman_naive_twitter_auth', true)
       localStorage.setItem('postman_naive_twitter_user', user)
       localStorage.setItem('postman_naive_twitter_followers', followers)
 
-      modifyAuthState.setToken(token)
-      modifyAuthState.setIsAuthenticated(isAuthenticated)
-      modifyAuthState.setUser(user)
-      modifyAuthState.setFollowers(followers)
-      modifyAuthState.setFeed(feed)
-      modifyAuthState.setServerAuthorised(true)
-
+      setToken(token)
+      setUser(user)
+      setFollowers(followers)
+      setFeed(feed)
+      setServerAuthFlag(true)
     })
 }
 
 function Login(props) {
+  const authContext = useContext(AuthContext)
   const username = useControlledInput('')
   const password = useControlledInput('')
-  const { authState, modifyAuthState } = props
+  const { modifyAuthState } = props
 
   const classes = useStyles()
 
@@ -61,7 +64,7 @@ function Login(props) {
     password: password.value
   }
 
-  if (authState.isAuthenticated) {
+  if (authContext.clientAuthFlag) {
     return (
       <Redirect to={{
         pathname: '/',
@@ -93,7 +96,7 @@ function Login(props) {
             variant='contained' 
             color='primary'
             fullWidth={true}
-            onClick={() => login(payload, modifyAuthState)}
+            onClick={() => login(payload, authContext, modifyAuthState.setFeed)}
           >
             Login
           </Button>
