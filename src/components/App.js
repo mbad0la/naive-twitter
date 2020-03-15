@@ -2,9 +2,7 @@ import React, { useState, useContext } from 'react'
 
 import { Link } from 'react-router-dom'
 
-import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
@@ -15,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Header from './Header'
 import { Profile } from './Profiles'
 import { Feed, PostMaker } from './PostComponents'
+import { Splash } from './Splash'
 
 import { AuthContext } from '../contexts'
 
@@ -32,16 +31,6 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     width: '100%'
   },
-  reAuthAvatarSize: {
-    width: theme.spacing(7),
-    height: theme.spacing(7)
-  },
-  progress: {
-    position: 'absolute',
-    top: -6,
-    left: -6,
-    zIndex: 1,
-  },
   guestScreenButton: {
     margin: theme.spacing(2)
   }
@@ -55,14 +44,7 @@ function App(props) {
   const classes = useStyles()
 
   if (clientAuthFlag && !serverAuthFlag) {
-    return (
-      <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
-        <div className={classes.relativeWrapper}>
-          <Avatar className={classes.reAuthAvatarSize}><MeetingRoomIcon /></Avatar>
-          <CircularProgress size={68} className={classes.progress}/>
-        </div>
-      </Grid>
-    )
+    return <Splash />
   }
 
   if (clientAuthFlag) {

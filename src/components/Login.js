@@ -33,18 +33,20 @@ const useStyles = makeStyles(theme => ({
 function login(payload, authContext) {
   axios.post('/login', payload)
     .then(res => {
-      const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
-      const { token, user } = res.data
+      if (res.data.isAuthenticated) {
+        const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
+        const { token, user } = res.data
 
-      setClientAuthFlag(true)
+        setClientAuthFlag(true)
 
-      localStorage.setItem('postman_naive_twitter_token', token)
-      localStorage.setItem('postman_naive_twitter_auth', true)
-      localStorage.setItem('postman_naive_twitter_user', user)
+        localStorage.setItem('postman_naive_twitter_token', token)
+        localStorage.setItem('postman_naive_twitter_auth', true)
+        localStorage.setItem('postman_naive_twitter_user', user)
 
-      setToken(token)
-      setUser(user)
-      setServerAuthFlag(true)
+        setToken(token)
+        setUser(user)
+        setServerAuthFlag(true)
+      }
     })
 }
 
