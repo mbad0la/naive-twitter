@@ -14,7 +14,15 @@ const validateToken = (token, key) => {
           User.findOne({ username: credentials.username })
           .then(user => {
             if (user && user.password == credentials.password) {
-              resolve({ isAuthenticated: true, user: user })
+              resolve({ 
+                isAuthenticated: true, 
+                user: {
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  username: user.username,
+                  followers: user.followers
+                }
+              })
             } else {
               resolve({ isAuthenticated: false })
             }
@@ -34,14 +42,18 @@ const validateToken = (token, key) => {
 const verifyLogin = (basicAuth, key) => {
   return new Promise((resolve, reject) => {
     if (basicAuth.username && basicAuth.password) {
-      User.findOne({ username: basicAuth.username }, 'password followers')
+      User.findOne({ username: basicAuth.username })
       .then(user => {
         if (user && user.password == basicAuth.password) {
           resolve({
             isAuthenticated: true,
             token: `JWT ${jwt.encode(basicAuth, key)}`,
-            user: basicAuth.username,
-            followers: JSON.stringify(user.followers)
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              username: user.username,
+              followers: user.followers
+            }
           })
         } else {
           resolve({
@@ -75,8 +87,7 @@ const validateRegistration = userInfo => {
         })
       } else {
         resolve({
-          success: true,
-          user: userInfo.firstName
+          success: true
         })
       }
     })

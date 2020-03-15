@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import Avatar from '@material-ui/core/Avatar'
 import Card from '@material-ui/core/Card'
@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios'
 import moment from 'moment'
 
-import { AuthContext } from '../AuthContext'
+import { AuthContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   post: {
@@ -41,7 +41,7 @@ function update(event, setContent) {
 }
 
 function createPost(payload, token, setFeed) {
-  axios.post('/api/post', payload, {headers: {'Authorization': token}})
+  axios.post('/api/post', payload, { headers: { 'Authorization': token } })
     .then(res => {
       if (res.data.success) {
         setFeed(res.data.feed)
@@ -51,9 +51,9 @@ function createPost(payload, token, setFeed) {
 
 function PostMaker(props) {
   const { token } = useContext(AuthContext)
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState('')
 
-  const { modifyAuthState } = props;
+  const { setFeed } = props
 
   const classes = useStyles();
   
@@ -73,7 +73,7 @@ function PostMaker(props) {
             size='small'
             color='primary'
             aria-label='publish'
-            onClick={() => createPost({ content }, token, modifyAuthState.setFeed)}
+            onClick={() => createPost({ content }, token, setFeed)}
           >
             <SendIcon />
           </Fab>
@@ -111,8 +111,15 @@ function Post(props) {
 }
 
 function Feed(props) {
-  const { authState } = props;
-  const { feed } = authState;
+  const { token, feed, setFeed } = props;
+
+  useEffect(() => {
+    axios.get('/api/feed', { headers: { 'Authorization': token } })
+      .then(res => {
+        console.log(res.data)
+        setFeed(res.data.feed || [])
+      })
+  }, [])
 
   return (feed.map(post => (
     <Grid key={post._id} item xs={12}>

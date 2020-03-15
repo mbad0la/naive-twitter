@@ -8,49 +8,44 @@ import App from './App'
 import Login from './Login'
 import Register from './Register'
 
-import { AuthContext } from '../AuthContext'
+import { AuthContext } from '../contexts'
 
 function View(props) {
   const [serverAuthFlag, setServerAuthFlag] = useState(false)
   const [clientAuthFlag, setClientAuthFlag] = useState(localStorage.getItem('postman_naive_twitter_auth') || false)
   const [token, setToken] = useState(localStorage.getItem('postman_naive_twitter_token'))
   const [user, setUser] = useState(localStorage.getItem('postman_naive_twitter_user'))
-  const [followers, setFollowers] = useState(localStorage.getItem('postman_naive_twitter_followers') || [])
-  const [feed, setFeed] = useState([])
 
   useEffect(() => {
     if (clientAuthFlag) {
       console.log('view will mount in protected mode')
-      axios.get('/api/feed', {headers: {'Authorization': token}})
+      axios({ method: 'post', url: '/token-check', headers: { 'Authorization': token } })
         .then(res => {
           if (res.data.isAuthenticated) {
             console.log('Network authorises too')
+
             setTimeout(() => {
               setToken(token)
-              setUser(user)
-              setFollowers(followers)
-              setFeed(res.data.feed)
+              setUser(res.data.user)
               setServerAuthFlag(true)
             }, 1500)
           } else {
             console.log('Network feels messy, authentication sync failed')
+
+            setServerAuthFlag(false)
             setTimeout(() => {
-              setServerAuthFlag(false)
               setToken(null)
-              setClientAuthFlag(false)
               setUser(null)
-              setFollowers([])
-              setFeed([])
+              setClientAuthFlag(false)
             }, 1500)
           }
         })
     } else {
       console.log('view will mount in unprotected mode')
+
       setToken(token)
       setClientAuthFlag(clientAuthFlag)
       setUser(user)
-      setFollowers(followers)
-      setFeed([])
     }
   }, [])
 
@@ -59,22 +54,17 @@ function View(props) {
     serverAuthFlag,
     token,
     user,
-    followers,
     setClientAuthFlag,
     setServerAuthFlag,
     setToken,
-    setUser,
-    setFollowers
+    setUser
   }
-
-  const authState = { feed }
-  const modifyAuthState = { setFeed }
 
   return (
     <AuthContext.Provider value={authContext}>
-      <Route exact path='/' render={() => <App modifyAuthState={modifyAuthState} authState={authState} />} />
-      <Route path='/login' render={() => <Login modifyAuthState={modifyAuthState} authState={authState} />} />
-      <Route path='/register' render={() => <Register modifyAuthState={modifyAuthState} authState={authState} />} />
+      <Route exact path='/' render={() => <App/>} />
+      <Route path='/login' render={() => <Login/>} />
+      <Route path='/register' render={() => <Register/>} />
     </AuthContext.Provider>
   )
 }

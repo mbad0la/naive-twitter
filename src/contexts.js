@@ -5,10 +5,8 @@ export const AuthContext = React.createContext({
   serverAuthFlag: false,
   token: null,
   user: null,
-  followers: [],
   setClientAuthFlag: () => {},
   setServerAuthFlag: () => {},
   setToken: () => {},
-  setUser: () => {},
-  setFollowers: () => {}
+  setUser: () => {}
 })

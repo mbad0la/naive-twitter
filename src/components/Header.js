@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { ProfileSearch } from './Profiles'
 
-import { AuthContext } from '../AuthContext'
+import { AuthContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   headerRoot: {
@@ -19,27 +19,24 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function logout(authContext, setFeed) {
-  const { setClientAuthFlag, setServerAuthFlag, setToken, setUser, setFollowers } = authContext
+function logout(authContext) {
+  const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
 
   setServerAuthFlag(false)
 
   localStorage.removeItem('postman_naive_twitter_auth')
   localStorage.removeItem('postman_naive_twitter_token')
   localStorage.removeItem('postman_naive_twitter_user')
-  localStorage.removeItem('postman_naive_twitter_followers')
 
   setToken(null)
   setUser(null)
-  setFollowers([])
-  setFeed([])
 
   setClientAuthFlag(false)
 }
 
 function Header(props) {
   const authContext = useContext(AuthContext)
-  const { modifyAuthState, setMatches } = props
+  const { setMatches } = props
 
   const classes = useStyles()
 
@@ -55,7 +52,7 @@ function Header(props) {
         <Button
           size='medium'
           color='secondary'
-          onClick={() => logout(authContext, modifyAuthState.setFeed)}
+          onClick={() => logout(authContext)}
         >
           Sign Out
         </Button>

@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import axios from 'axios'
 
-import { AuthContext } from '../AuthContext'
+import { AuthContext } from '../contexts'
 import { useControlledInput } from '../hooks'
 
 const useStyles = makeStyles(theme => ({
@@ -30,23 +30,20 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function login(payload, authContext, setFeed) {
+function login(payload, authContext) {
   axios.post('/login', payload)
     .then(res => {
-      const { setClientAuthFlag, setServerAuthFlag, setToken, setUser, setFollowers } = authContext
-      const { token, user, followers, feed } = res.data
+      const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
+      const { token, user } = res.data
 
       setClientAuthFlag(true)
 
       localStorage.setItem('postman_naive_twitter_token', token)
       localStorage.setItem('postman_naive_twitter_auth', true)
       localStorage.setItem('postman_naive_twitter_user', user)
-      localStorage.setItem('postman_naive_twitter_followers', followers)
 
       setToken(token)
       setUser(user)
-      setFollowers(followers)
-      setFeed(feed)
       setServerAuthFlag(true)
     })
 }
@@ -55,7 +52,6 @@ function Login(props) {
   const authContext = useContext(AuthContext)
   const username = useControlledInput('')
   const password = useControlledInput('')
-  const { modifyAuthState } = props
 
   const classes = useStyles()
 
@@ -96,7 +92,7 @@ function Login(props) {
             variant='contained' 
             color='primary'
             fullWidth={true}
-            onClick={() => login(payload, authContext, modifyAuthState.setFeed)}
+            onClick={() => login(payload, authContext)}
           >
             Login
           </Button>

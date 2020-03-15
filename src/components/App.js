@@ -16,7 +16,7 @@ import Header from './Header'
 import { Profile } from './Profiles'
 import { Feed, PostMaker } from './PostComponents'
 
-import { AuthContext } from '../AuthContext'
+import { AuthContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   feedMargin: {
@@ -49,8 +49,8 @@ const useStyles = makeStyles(theme => ({
 
 function App(props) {
   const [matches, setMatches] = useState([])
-  const { authState, modifyAuthState } = props
-  const { clientAuthFlag, serverAuthFlag, followers } = useContext(AuthContext)
+  const [feed, setFeed] = useState([])
+  const { clientAuthFlag, serverAuthFlag, user, token } = useContext(AuthContext)
 
   const classes = useStyles()
 
@@ -68,17 +68,16 @@ function App(props) {
   if (clientAuthFlag) {
     return (
       <Container maxWidth={false}>
-        <Header modifyAuthState={modifyAuthState} setMatches={setMatches}/>
+        <Header setMatches={setMatches}/>
         <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
           {
             matches.map(match => (
               <Profile
                 key={match.username}
-                follower={followers.includes(match.username)}
+                follower={user.followers.includes(match.username)}
                 data={match}
-                authState={authState}
-                modifyAuthState={modifyAuthState}
+                setFeed={setFeed}
               />
             ))
           } 
@@ -86,10 +85,10 @@ function App(props) {
           <Grid item md={2} xs={12}/>
           <Grid container item md={6} xs={12}>
             <Grid item xs={12}>
-              <PostMaker authState={authState} modifyAuthState={modifyAuthState}/>
+              <PostMaker setFeed={setFeed}/>
             </Grid>
             <Grid item xs={12} className={classes.feedMargin}>
-              <Feed authState={authState} modifyAuthState={modifyAuthState}/>
+              <Feed token={token} feed={feed} setFeed={setFeed}/>
             </Grid>
           </Grid>
         </Grid>

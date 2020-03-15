@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import axios from 'axios'
 
-import { AuthContext } from '../AuthContext'
+import { AuthContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   cardDimensions: {
@@ -24,13 +24,9 @@ function follow(username, authContext, setFeed) {
   axios.put(`/api/following/${username}`, {}, { headers: { 'Authorization': authContext.token } })
     .then(res => {
       if (res.data.success) {
-        localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-        authContext.setFollowers(res.data.followers)
+        localStorage.setItem('postman_naive_twitter_user', res.data.user)
+        authContext.setUser(res.data.user)
         setFeed(res.data.feed)
-      } else {
-        localStorage.setItem('postman_naive_twitter_auth', false)
-        authContext.setClientAuthFlag(false)
-        authContext.setServerAuthFlag(false)
       }
     })
 }
@@ -39,13 +35,9 @@ function unfollow(username, authContext, setFeed) {
   axios.delete(`/api/following/${username}`, { headers: { 'Authorization': authContext.token } })
     .then(res => {
       if (res.data.success) {
-        localStorage.setItem('postman_naive_twitter_followers', res.data.followers)
-        authContext.setFollowers(res.data.followers)
+        localStorage.setItem('postman_naive_twitter_user', res.data.user)
+        authContext.setUser(res.data.user)
         setFeed(res.data.feed)
-      } else {
-        localStorage.setItem('postman_naive_twitter_auth', false)
-        authContext.setClientAuthFlag(false)
-        authContext.setServerAuthFlag(false)
       }
     })
 }
@@ -61,7 +53,7 @@ function searchUsers(event, setMatches) {
 
 function Profile(props) {
   const authContext = useContext(AuthContext)
-  const { data, follower, modifyAuthState} = props;
+  const { data, follower, setFeed } = props;
   const { firstName, lastName, username } = data;
 
   const classes = useStyles();
@@ -74,12 +66,12 @@ function Profile(props) {
         avatar={<Avatar>{firstName.substring(0, 1)}</Avatar>}
       />
       {
-        (authContext.user !== username) ? (
+        (authContext.user.username !== username) ? (
           <CardActions>
             {
               (follower) ?
-                <Button onClick={() => unfollow(username, authContext, modifyAuthState.setFeed)} color='secondary'>Unfollow</Button>
-                : <Button onClick={() => follow(username, authContext, modifyAuthState.setFeed)} color='primary'>Follow</Button>
+                <Button onClick={() => unfollow(username, authContext, setFeed)} color='secondary'>Unfollow</Button>
+                : <Button onClick={() => follow(username, authContext, setFeed)} color='primary'>Follow</Button>
             }
           </CardActions>
         ) : undefined
@@ -90,7 +82,7 @@ function Profile(props) {
 }
 
 function ProfileSearch(props) {
-  const {setMatches} = props;
+  const { setMatches } = props;
 
   return (
     <TextField
@@ -103,4 +95,4 @@ function ProfileSearch(props) {
   )
 }
 
-export {ProfileSearch, Profile}
+export { ProfileSearch, Profile }

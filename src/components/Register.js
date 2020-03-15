@@ -12,7 +12,7 @@ import axios from 'axios'
 
 import { login } from './Login'
 
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../contexts';
 import { useControlledInput } from '../hooks'
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function register(event, payload, authContext, setFeed) {
+function register(event, payload, authContext) {
   axios.post('/register', payload)
     .then(res => {
       if (res.data.success) {
@@ -43,7 +43,7 @@ function register(event, payload, authContext, setFeed) {
           password: payload.password
         }
 
-        login(loginPayload, authContext, setFeed)
+        login(loginPayload, authContext)
       } else {
         // no-op
       }
@@ -56,8 +56,6 @@ function Register(props) {
   const lastName = useControlledInput('')
   const username = useControlledInput('')
   const password = useControlledInput('')
-  
-  const { modifyAuthState } = props
 
   const classes = useStyles()
 
@@ -115,7 +113,7 @@ function Register(props) {
             variant='contained' 
             color='primary'
             fullWidth={true}
-            onClick={(e) => register(e, payload, authContext, modifyAuthState.setFeed)}
+            onClick={(e) => register(e, payload, authContext)}
           >
             Register
           </Button>

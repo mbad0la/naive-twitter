@@ -39,13 +39,22 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
       log.http(req.method, req.url)
       next()
     })
+
+    app.post('/token-check', (req, res) => {
+      const token = req.get('Authorization')
+
+      validateToken(token, JWT_KEY)
+        .then(feedback => {
+          res.json(feedback)
+        })
+    })
     
     app.post('/register', (req, res) => {
       log.info('Register', `@${req.body.username}`)
     
       validateRegistration(req.body)
         .then(feedback => {
-          res.send(JSON.stringify(feedback))
+          res.json(feedback)
         })
     })
     
@@ -54,17 +63,7 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
     
       verifyLogin(req.body, JWT_KEY)
         .then(feedback => {
-          if (feedback.isAuthenticated) {
-            let feed_followers = JSON.parse(feedback.followers)
-            feed_followers.push(feedback.user)
-            Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
-              .then(docs => {
-                feedback.feed = docs
-                res.json(feedback)
-              })
-          } else {
-            res.json(feedback)
-          }
+          res.json(feedback)
         })
     })
     
@@ -87,7 +86,16 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
                   console.log(feed_followers)
                   Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
                     .then(docs => {
-                      res.json({success: true, followers: JSON.stringify(doc.followers), feed: docs})
+                      res.json({
+                        success: true,
+                        user: {
+                          firstName: doc.firstName,
+                          lastName: doc.lastName,
+                          username: doc.username,
+                          followers: doc.followers
+                        },
+                        feed: docs
+                      })
                     })
                 })
               })
@@ -96,7 +104,7 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           }
         })
         .catch(e => {
-          res.json({isAuthenticated: false})
+          res.json({ isAuthenticated: false })
         })
     
     })
@@ -114,7 +122,16 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
                   feed_followers.push(doc.username)
                   Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
                     .then(docs => {
-                      res.json({success: true, followers: JSON.stringify(doc.followers), feed: docs})
+                      res.json({
+                        success: true,
+                        user: {
+                          firstName: doc.firstName,
+                          lastName: doc.lastName,
+                          username: doc.username,
+                          followers: doc.followers
+                        },
+                        feed: docs
+                      })
                     })
                 })
               })
@@ -123,10 +140,10 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           }
         })
         .catch(e => {
-          res.json({isAuthenticated: false})
+          res.json({ isAuthenticated: false })
         })
     })
-    
+   
     app.post('/api/post', (req, res) => {
       let token = req.get('Authorization')
       validateToken(token, JWT_KEY)
@@ -136,13 +153,13 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
             post.save((err, post) => {
               if (err) {
                 console.log(err)
-                res.json({success: false})
+                res.json({ success: false })
               } else {
                 let feed_followers = feedback.user.followers
                 feed_followers.push(feedback.user.username)
                 Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
                   .then(docs => {
-                    res.json({success: true, feed: docs})
+                    res.json({ success: true, feed: docs })
                   })
               }
             })
@@ -160,15 +177,17 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
             feedback.user.followers.push(feedback.user.username)
             Post.find({'user.username': {$in: feedback.user.followers}}).sort({timestamp: -1})
               .then(docs => {
-                feedback.feed = docs
-                res.json(feedback)
+                res.json({
+                  ...feedback,
+                  feed: docs
+                })
               })
           } else {
             res.json(feedback)
           }
         })
         .catch(e => {
-          res.json({isAuthenticated: false})
+          res.json({ isAuthenticated: false })
         })
     })
     
