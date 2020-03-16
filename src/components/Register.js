@@ -81,16 +81,14 @@ function register(event, payload, authContext) {
 
 function Register(props) {
   const authContext = useContext(AuthContext)
-  const firstName = useControlledInput('')
-  const lastName = useControlledInput('')
+  const name = useControlledInput('')
   const username = useControlledInput('')
   const password = useControlledInput('')
 
   const classes = useStyles()
 
   const payload = {
-    firstName: firstName.value,
-    lastName: lastName.value,
+    name: name.value,
     username: username.value,
     password: password.value
   }
@@ -114,30 +112,25 @@ function Register(props) {
         </Grid>
         <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            size='small'
             variant='filled'
-            label='First Name'
+            label='Name'
             fullWidth={true}
-            { ...firstName }
+            { ...name }
           />
         </Grid>
         <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            size='small'
             variant='filled'
-            label='Last Name'
-            fullWidth={true}
-            { ...lastName }
-          />         
-        </Grid>
-        <Grid item xs={12} className={classes.textFieldGrid}>
-          <TextField
-            variant='filled'
-            label='Username'
+            label='Handle'
             fullWidth={true}
             { ...username }
           />
         </Grid>
         <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            size='small'
             variant='filled'
             type='password'
             label='Password'

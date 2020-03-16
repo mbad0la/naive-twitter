@@ -54,16 +54,18 @@ function searchUsers(event, setMatches) {
 function Profile(props) {
   const authContext = useContext(AuthContext)
   const { data, follower, setFeed } = props;
-  const { firstName, lastName, username } = data;
+  const { firstName, lastName, name, username } = data;
 
-  const classes = useStyles();
+  const classes = useStyles()
+  console.log(name);
+  const cardTitle = ( name ? name : `${firstName} ${lastName}` )
     
   return (
     <Card className={classes.cardDimensions}>
       <CardHeader
-        title={`${firstName} ${lastName}`}
+        title={cardTitle}
         subheader={username}
-        avatar={<Avatar>{firstName.substring(0, 1)}</Avatar>}
+        avatar={<Avatar>{cardTitle.substring(0, 1)}</Avatar>}
       />
       {
         (authContext.user.username !== username) ? (

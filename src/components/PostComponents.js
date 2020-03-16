@@ -90,16 +90,18 @@ function PostMaker(props) {
 function Post(props) {
   const { data } = props;
   const { user, timestamp, content } = data;
-  const { firstName, lastName, username } = user;
+  const { firstName, lastName, name, username } = user;
 
   const classes = useStyles();
+
+  const cardTitle = name ? name : `${firstName} ${lastName}`;
     
   return (
     <Card className={classes.post}>
       <CardHeader
-        title={`${firstName} ${lastName}`}
+        title={cardTitle}
         subheader={`${username} • ${moment(timestamp).fromNow()}`}
-        avatar={<Avatar>{firstName.substring(0, 1)}</Avatar>}
+        avatar={<Avatar>{cardTitle.substring(0, 1)}</Avatar>}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">

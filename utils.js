@@ -19,6 +19,7 @@ const validateToken = (token, key) => {
                 user: {
                   firstName: user.firstName,
                   lastName: user.lastName,
+                  name: ( user.name ? user.name : `${user.firstName} ${user.lastName}` ),
                   username: user.username,
                   followers: user.followers
                 }
@@ -51,6 +52,7 @@ const verifyLogin = (basicAuth, key) => {
             user: {
               firstName: user.firstName,
               lastName: user.lastName,
+              name: ( user.name ? user.name : `${user.firstName} ${user.lastName}` ),
               username: user.username,
               followers: user.followers
             }

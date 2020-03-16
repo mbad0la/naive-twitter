@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -112,14 +111,16 @@ function Login(props) {
         </Grid>
         <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            size='small'
             variant='filled'
-            label='Username'
+            label='Handle'
             fullWidth={true}
             { ...username }
           />
         </Grid>
         <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            size='small'
             variant='filled'
             type='password'
             label='Password'

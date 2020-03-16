@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
+import GitHubIcon from '@material-ui/icons/GitHub';
+
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -50,6 +52,9 @@ const useStyles = makeStyles(theme => ({
       borderColor: 'rgb(29, 161, 242)',
       backgroundColor: 'rgb(33, 46, 64, 0.5)',
     }
+  },
+  textAlignCenter: {
+    textAlign: 'center'
   }
 }))
 
@@ -98,6 +103,11 @@ export const Landing = (props) => {
             </Button>
           </Link>
         </Grid>
+      </Grid>
+      <Grid item xs={12} className={classes.textAlignCenter}>
+        <a href='https://github.com/mbad0la/naive-twitter' target='_blank' className={classes.linkRoot}>
+          <GitHubIcon className={classes.white}/>
+        </a>
       </Grid>
     </Grid>
   )

@@ -68,7 +68,7 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
     })
     
     app.get('/api/profiles/:query', (req, res) => {
-      User.find({username: new RegExp(`^${req.params.query}`)}).limit(10).sort({username: -1}).select({firstName: 1, lastName: 1, username: 1, profileImageUrl: 1})
+      User.find({username: new RegExp(`^${req.params.query}`)}).limit(10).sort({username: -1}).select({firstName: 1, lastName: 1, username: 1, name: 1, profileImageUrl: 1})
         .then(docs => res.json(docs))
     })
     
@@ -79,6 +79,11 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           if (feedback.isAuthenticated) {
             User.findOne({ username: feedback.user.username })
               .then(doc => {
+                // DB migration
+                if (!doc.name) {
+                  doc.name = `${doc.firstName} ${doc.lastName}`
+                }
+
                 let newFollowing = doc.followers.addToSet(req.params.destination)
                 doc.save((err, doc) => {
                   let feed_followers = doc.followers
@@ -91,6 +96,7 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
                         user: {
                           firstName: doc.firstName,
                           lastName: doc.lastName,
+                          name: doc.name,
                           username: doc.username,
                           followers: doc.followers
                         },
@@ -116,6 +122,11 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           if (feedback.isAuthenticated) {
             User.findOne({ username: feedback.user.username })
               .then(doc => {
+                // DB migration
+                if (!doc.name) {
+                  doc.name = `${doc.firstName} ${doc.lastName}`
+                }
+
                 doc.followers = doc.followers.filter(username => (username != req.params.destination))
                 doc.save((err, doc) => {
                   let feed_followers = doc.followers
@@ -127,6 +138,7 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
                         user: {
                           firstName: doc.firstName,
                           lastName: doc.lastName,
+                          name: doc.name,
                           username: doc.username,
                           followers: doc.followers
                         },
