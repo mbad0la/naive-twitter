@@ -21,13 +21,41 @@ const useStyles = makeStyles(theme => ({
     top: 0,
     left: 0,
     height: '100%',
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'rgb(218, 218, 218, 0.85)',
   },
-  marginTopOne: {
-    marginTop: theme.spacing(1)
+  logo: {
+    width: '100%',
+    marginBottom: theme.spacing(3)
   },
-  marginTopTwo: {
-    marginTop: theme.spacing(2)
+  textFieldGrid: {
+    marginTop: theme.spacing(1),
+    '& label': {
+      color: '#969696'
+    },
+    '& label.Mui-focused': {
+      color: 'rgb(16, 31, 51)',
+    },
+    '& .MuiFilledInput-underline:before': {
+      borderBottomColor: '#969696',
+    },
+    '& .MuiFilledInput-underline:after': {
+      borderBottomColor: 'rgb(16, 31, 51)',
+    },
+    '& .MuiInputBase-root > input': {
+      color: 'rgb(16, 31, 51)'
+    },
+    '& .MuiFilledInput-root': {
+      backgroundColor: '#efefef'
+    }
+  },
+  registerButton: {
+    marginTop: theme.spacing(2),
+    backgroundColor: 'rgb(16, 31, 51, 0.9)',
+    textTransform: 'none',
+    '&:hover': {
+      backgroundColor: 'rgb(16, 31, 51)'
+    }
   }
 }))
 
@@ -77,42 +105,52 @@ function Register(props) {
 
   return (
     <Grid container className={classes.root} justify='center' alignItems='center'>
-      <Grid container item xs={8} md={3} direction='column'>
-        <Grid item xs={12} className={classes.marginTopOne}>
+      <Grid container item xs={10} md={3} direction='column'>
+        <Grid container item xs={12} justify='center'>
+          <Grid item xs={3}>
+            <img src='/assets/naive-twitter-logo-dark.svg' className={classes.logo}/>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            variant='filled'
             label='First Name'
             fullWidth={true}
             { ...firstName }
           />
         </Grid>
-        <Grid item xs={12} className={classes.marginTopOne}>
+        <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            variant='filled'
             label='Last Name'
             fullWidth={true}
             { ...lastName }
           />         
         </Grid>
-        <Grid item xs={12} className={classes.marginTopOne}>
+        <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            variant='filled'
             label='Username'
             fullWidth={true}
             { ...username }
           />
         </Grid>
-        <Grid item xs={12} className={classes.marginTopOne}>
+        <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
+            variant='filled'
             type='password'
             label='Password'
             fullWidth={true}
             { ...password }
           />        
         </Grid>
-        <Grid item xs={12} className={classes.marginTopTwo}>
+        <Grid item xs={12}>
           <Button 
-            className={classes.button}
+            className={classes.registerButton}
             variant='contained' 
             color='primary'
             fullWidth={true}
+            size='large'
             onClick={(e) => register(e, payload, authContext)}
           >
             Register

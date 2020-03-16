@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
   },
   guestScreenLogin: {
     marginTop: theme.spacing(1),
-    borderRadius: '20px',
     backgroundColor: 'rgb(29, 161, 242, 0.8)',
     textTransform: 'none',
     '&:hover': {
@@ -43,7 +42,6 @@ const useStyles = makeStyles(theme => ({
   },
   guestScreenRegister: {
     marginTop: theme.spacing(1),
-    borderRadius: '20px',
     backgroundColor: 'rgb(16, 31, 51)',
     borderColor: 'rgb(29, 161, 242)',
     color: 'rgb(29, 161, 242)',
@@ -64,14 +62,14 @@ export const Landing = (props) => {
         <Grid item xs={3}>
           <img src='/assets/naive-twitter-logo.svg' className={classes.logo}/>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant='h4' component='h1' className={classes.heroText}>
-            Naive twitter is free, and always will be.
+        <Grid item xs={12} className={classes.heroText}>
+          <Typography variant='h5' component='h1'>
+            Follow people and share 140 character messages with your network.
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant='body2' className={classes.white}>
-            Check it out?
+          <Typography variant='body1' className={classes.white}>
+            What are you gonna do about it?
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -81,6 +79,7 @@ export const Landing = (props) => {
               variant="contained"
               color="primary"
               fullWidth={true}
+              size='large'
             >
               Log in
             </Button>
@@ -93,6 +92,7 @@ export const Landing = (props) => {
               variant="outlined"
               color="primary"
               fullWidth={true}
+              size='large'
             >
               Sign up
             </Button>
