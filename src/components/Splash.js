@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     height: '100%',
     width: '100%',
-    backgroundColor: '#56CCF2'
+    backgroundColor: 'rgb(16, 31, 51)'
   },
   planeProperties: {
     height: '10vh',

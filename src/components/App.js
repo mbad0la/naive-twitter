@@ -1,16 +1,12 @@
 import React, { useState, useContext } from 'react'
 
-import { Link } from 'react-router-dom'
-
-import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
 import Header from './Header'
+import { Landing } from './Landing'
 import { Profile } from './Profiles'
 import { Feed, PostMaker } from './PostComponents'
 import { Splash } from './Splash'
@@ -20,19 +16,6 @@ import { AuthContext } from '../contexts'
 const useStyles = makeStyles(theme => ({
   feedMargin: {
     marginTop: theme.spacing(2)
-  },
-  relativeWrapper: {
-    position: 'relative'
-  },
-  guestScreenRoot: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    height: '100%',
-    width: '100%'
-  },
-  guestScreenButton: {
-    margin: theme.spacing(2)
   }
 }))
 
@@ -77,28 +60,7 @@ function App(props) {
       </Container>
     )
   } else {
-    return (
-      <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
-        <Link to='/login'>
-          <Button
-            className={classes.guestScreenButton}
-            variant="contained"
-            color="primary"
-          >
-            <MeetingRoomIcon />
-          </Button>
-        </Link>
-        <Link to='/register'>
-          <Button
-            className={classes.guestScreenButton}
-            variant="contained"
-            color="primary"
-          >
-            <PersonAddIcon />
-          </Button>
-        </Link>
-      </Grid>
-    )
+    return <Landing />
   }
 }
 
