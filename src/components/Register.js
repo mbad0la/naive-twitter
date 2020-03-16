@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
   logo: {
     width: '100%',
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(3)
   },
   textFieldGrid: {
@@ -104,7 +105,7 @@ function Register(props) {
   }
 
   return (
-    <Grid container className={classes.root} justify='center' alignItems='center'>
+    <Grid container className={classes.root} justify='center' alignItems='flex-start'>
       <Grid container item xs={10} md={3} direction='column'>
         <Grid container item xs={12} justify='center'>
           <Grid item xs={3}>
