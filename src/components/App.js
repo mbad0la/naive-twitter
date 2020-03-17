@@ -15,7 +15,7 @@ import { AuthContext, FeedContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   content: {
-    position: 'relative',
+    position: 'absolute',
     top: '10vh'
   },
   feedMargin: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function App(props) {
-  const [pageName, setPageName] = useState('profile')
+  const [pageName, setPageName] = useState('home')
   const [feed, setFeed] = useState([])
   const { clientAuthFlag, serverAuthFlag } = useContext(AuthContext)
 
@@ -37,11 +37,11 @@ function App(props) {
   if (clientAuthFlag) {
     return (
       <FeedContext.Provider value={{ feed, setFeed }}>
-        <Grid container justify='center'>
-          <Header pageName={pageName} setPageName={setPageName}/>
-          <Grid item xs={10} sm={6} md={4} className={classes.content}>
-            <Content name={pageName} />
-          </Grid>
+        <Header pageName={pageName} setPageName={setPageName}/>
+        <Grid container justify='center' className={classes.content}>
+            <Grid item xs={10} sm={6} md={4} >
+              <Content name={pageName} />
+            </Grid>
         </Grid>
       </FeedContext.Provider>
     )

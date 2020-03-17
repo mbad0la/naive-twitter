@@ -1,6 +1,6 @@
 {
   "name": "naive-twitter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Broadcast messages upto 140 characters in your network",
   "main": "index.js",
   "scripts": {
