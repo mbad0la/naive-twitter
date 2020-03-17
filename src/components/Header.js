@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import HomeIcon from '@material-ui/icons/Home'
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import GroupAddIcon from '@material-ui/icons/GroupAdd'
 import PersonPinIcon from '@material-ui/icons/PersonPin'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -58,7 +58,7 @@ const Header = (props) => {
         variant="fullWidth"
         aria-label="icon label tabs example"
       >
-        <Tab icon={<PersonAddIcon className={classes.navIcons} />} disableRipple/>
+        <Tab icon={<GroupAddIcon className={classes.navIcons} />} disableRipple/>
         <Tab icon={<HomeIcon className={classes.navIcons} />} disableRipple/>
         <Tab icon={<PersonPinIcon className={classes.navIcons} />} disableRipple/>
       </Tabs>

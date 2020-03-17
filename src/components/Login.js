@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
+
 import { makeStyles } from '@material-ui/core/styles'
 
 import axios from 'axios'
@@ -105,9 +107,7 @@ function Login(props) {
     <Grid container className={classes.root} justify='center' alignItems='flex-start'>
       <Grid container item xs={10} md={3} direction='column'>
         <Grid container item xs={12} justify='center'>
-          <Grid item xs={3}>
-            <img src='/assets/naive-twitter-logo-dark.svg' className={classes.logo}/>
-          </Grid>
+          <MeetingRoomIcon style={{ color: 'rgb(16, 31, 51)', fontSize: '3.5rem', margin: '1rem 0' }}/>
         </Grid>
         <Grid item xs={12} className={classes.textFieldGrid}>
           <TextField
