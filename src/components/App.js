@@ -16,7 +16,7 @@ import { AuthContext, FeedContext } from '../contexts'
 const useStyles = makeStyles(theme => ({
   content: {
     position: 'absolute',
-    top: '10vh'
+    top: '5rem'
   },
   feedMargin: {
     marginTop: theme.spacing(2)

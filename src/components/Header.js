@@ -20,15 +20,15 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: 0,
     width: '100%',
-    height: '7.5vh',
+    height: '3rem',
     zIndex: 5,
     backgroundColor: '#ffffff',
     boxShadow: '2px 0px 4px 2px #e8e8e8',
     '& .MuiTabs-root': {
-      height: '7.5vh'
+      height: '3rem'
     },
     '& .MuiTabs-flexContainer': {
-      height: '7.5vh'
+      height: '3rem'
     },
     '& .Mui-selected': {
       color: 'rgb(29, 161, 242)',
