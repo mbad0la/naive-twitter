@@ -7,11 +7,11 @@ import CardHeader from '@material-ui/core/CardHeader'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@material-ui/icons/Send'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography'
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -20,7 +20,7 @@ import { AuthContext, FeedContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   post: {
-    margin: '1rem 0'
+    margin: '1vh 0'
   },
   postMakerRoot: {
     padding: theme.spacing(2)
@@ -31,6 +31,27 @@ const useStyles = makeStyles(theme => ({
   postMakerCharacterRemaining: {
     textAlign: 'end',
     color: 'lightgrey'
+  },
+  postButton: {
+    color: '#ffffff',
+    backgroundColor: 'rgb(29, 161, 242)',
+    '&:hover': {
+      backgroundColor: 'rgb(29, 161, 242)'
+    }
+  },
+  postField: {
+    '& label.Mui-focused': {
+      color: 'rgb(29, 161, 242)',
+    },
+    '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+      borderBottom: '2px solid rgba(0, 0, 0, 0.42)'
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'rgb(29, 161, 242)',
+    },
+    '& .MuiInputBase-root > input': {
+      color: 'rgb(29, 161, 242)'
+    }
   }
 }))
 
@@ -51,15 +72,15 @@ function createPost(payload, token, setFeed) {
 
 function PostMaker(props) {
   const { token } = useContext(AuthContext)
+  const { setFeed } = useContext(FeedContext)
   const [content, setContent] = useState('')
-
-  const { setFeed } = props
 
   const classes = useStyles();
   
   return (
     <Paper elevation={3} className={classes.postMakerRoot}>
       <TextField
+        className={classes.postField}
         value={content}
         fullWidth={true}
         label="Your thoughts go here ..."
@@ -70,8 +91,8 @@ function PostMaker(props) {
       <Grid container className={classes.postMakerActionGrid}>
         <Grid item xs={2}>
           <Fab
+            className={classes.postButton}
             size='small'
-            color='primary'
             aria-label='publish'
             onClick={() => createPost({ content }, token, setFeed)}
           >
@@ -80,7 +101,9 @@ function PostMaker(props) {
         </Grid>
         <Grid item xs={9}/>
         <Grid item xs={1}>
-          <div className={classes.postMakerCharacterRemaining}>{140 - content.length}</div>
+          <Typography className={classes.postMakerCharacterRemaining} variant="caption" display="block">
+            {140 - content.length}
+          </Typography>
         </Grid>
       </Grid>
     </Paper>

@@ -2,14 +2,14 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import HomeIcon from '@material-ui/icons/Home';
-import SearchIcon from '@material-ui/icons/Search';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import HomeIcon from '@material-ui/icons/Home'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import PersonPinIcon from '@material-ui/icons/PersonPin'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -20,15 +20,15 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: 0,
     width: '100%',
-    height: '10vh',
+    height: '7.5vh',
     zIndex: 5,
     backgroundColor: '#ffffff',
     boxShadow: '2px 0px 4px 2px #e8e8e8',
     '& .MuiTabs-root': {
-      height: '10vh'
+      height: '7.5vh'
     },
     '& .MuiTabs-flexContainer': {
-      height: '10vh'
+      height: '7.5vh'
     },
     '& .Mui-selected': {
       color: 'rgb(29, 161, 242)',
@@ -58,7 +58,7 @@ const Header = (props) => {
         variant="fullWidth"
         aria-label="icon label tabs example"
       >
-        <Tab icon={<SearchIcon className={classes.navIcons} />} disableRipple/>
+        <Tab icon={<PersonAddIcon className={classes.navIcons} />} disableRipple/>
         <Tab icon={<HomeIcon className={classes.navIcons} />} disableRipple/>
         <Tab icon={<PersonPinIcon className={classes.navIcons} />} disableRipple/>
       </Tabs>

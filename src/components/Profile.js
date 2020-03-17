@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 const Profile = (props) => {
   const authContext = useContext(AuthContext)
   const { user } = authContext
-  const { firstName, lastName, name, followers } = user
+  const { firstName, lastName, name, followers, username } = user
 
   const classes = useStyles()
 
@@ -67,8 +67,13 @@ const Profile = (props) => {
           <Typography gutterBottom variant='h5' component='h2'>
             {profileName}
           </Typography>
-          <Grid container justify='flex-start' direction='column'>
-            <Grid item xs={3}>
+          <Grid container justify='space-around' direction='row' spacing={6}>
+            <Grid item xs={6}>
+                <Typography variant='body2' display='inline'>
+                  {`@${username}`}
+                </Typography>
+            </Grid>
+            <Grid container item xs={6} justify='flex-end'>
               <div className={classes.profileStats}>
                 <PeopleIcon />
                 <Typography variant='body2' display='inline'>
