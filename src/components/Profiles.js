@@ -51,7 +51,7 @@ function searchUsers(event, setMatches) {
   }
 }
 
-function Profile(props) {
+function ProfileCard(props) {
   const authContext = useContext(AuthContext)
   const { data, follower, setFeed } = props;
   const { firstName, lastName, name, username } = data;
@@ -97,4 +97,4 @@ function ProfileSearch(props) {
   )
 }
 
-export { ProfileSearch, Profile }
+export { ProfileSearch, ProfileCard }

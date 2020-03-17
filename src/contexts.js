@@ -10,3 +10,8 @@ export const AuthContext = React.createContext({
   setToken: () => {},
   setUser: () => {}
 })
+
+export const FeedContext = React.createContext({
+  feed: [],
+  setFeed: () => {}
+})

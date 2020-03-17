@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios'
 import moment from 'moment'
 
-import { AuthContext } from '../contexts'
+import { AuthContext, FeedContext } from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   post: {
@@ -113,14 +113,16 @@ function Post(props) {
 }
 
 function Feed(props) {
-  const { token, feed, setFeed } = props;
+  const { token } = useContext(AuthContext)
+  const { feed, setFeed } = useContext(FeedContext)
 
   useEffect(() => {
-    axios.get('/api/feed', { headers: { 'Authorization': token } })
-      .then(res => {
-        console.log(res.data)
-        setFeed(res.data.feed || [])
-      })
+    if (feed.length === 0) {
+      axios.get('/api/feed', { headers: { 'Authorization': token } })
+        .then(res => {
+          setFeed(res.data.feed || [])
+        })
+    }
   }, [])
 
   return (feed.map(post => (

@@ -105,9 +105,9 @@ export const Landing = (props) => {
         </Grid>
       </Grid>
       <Grid item xs={12} className={classes.textAlignCenter}>
-        <a href='https://github.com/mbad0la/naive-twitter' target='_blank' className={classes.linkRoot}>
-          <GitHubIcon className={classes.white}/>
-        </a>
+          <a href='https://github.com/mbad0la/naive-twitter' target='_blank' className={classes.linkRoot}>
+            <GitHubIcon className={classes.white}/>
+          </a>
       </Grid>
     </Grid>
   )

@@ -63,8 +63,8 @@ function View(props) {
   return (
     <AuthContext.Provider value={authContext}>
       <Route exact path='/' render={() => <App/>} />
-      <Route path='/login' render={() => <Login/>} />
-      <Route path='/register' render={() => <Register/>} />
+      <Route exact path='/login' render={() => <Login/>} />
+      <Route exact path='/register' render={() => <Register/>} />
     </AuthContext.Provider>
   )
 }

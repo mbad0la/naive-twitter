@@ -1,63 +1,68 @@
-import React, { useContext } from 'react'
+import React from 'react'
+
+import { Link } from 'react-router-dom'
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button'
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
 
 import { makeStyles } from '@material-ui/core/styles'
 
 import { ProfileSearch } from './Profiles'
 
-import { AuthContext } from '../contexts'
-
 const useStyles = makeStyles(theme => ({
-  headerRoot: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(3)
+  root: {
+    position: 'fixed',
+    top: 0,
+    width: '100%',
+    height: '10vh',
+    zIndex: 5,
+    backgroundColor: '#ffffff',
+    boxShadow: '2px 0px 4px 2px #e8e8e8',
+    '& .MuiTabs-root': {
+      height: '10vh'
+    },
+    '& .MuiTabs-flexContainer': {
+      height: '10vh'
+    },
+    '& .Mui-selected': {
+      color: 'rgb(29, 161, 242)',
+      // backgroundColor: 'rgb(29, 161, 242)'
+    },
+    '& .MuiTabs-indicator': {
+      // color: 'rgb(29, 161, 242)',
+      backgroundColor: 'rgb(29, 161, 242)'
+    }
   },
-  logoutRoot: {
-    textAlign: 'end'
+  navIcons: {
+    fontSize: '2rem'
   }
 }))
 
-function logout(authContext) {
-  const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
-
-  setServerAuthFlag(false)
-
-  localStorage.removeItem('postman_naive_twitter_auth')
-  localStorage.removeItem('postman_naive_twitter_token')
-  localStorage.removeItem('postman_naive_twitter_user')
-
-  setToken(null)
-  setUser(null)
-
-  setClientAuthFlag(false)
-}
-
-function Header(props) {
-  const authContext = useContext(AuthContext)
-  const { setMatches } = props
-
+const Header = (props) => {
+  const pageNames = ['search', 'home', 'profile']
   const classes = useStyles()
 
+  const { pageName, setPageName } = props
+
   return (
-    <Grid container className={classes.headerRoot}>
-      <Grid item xs={7} md={4}>
-        <ProfileSearch
-          setMatches={setMatches}
-        />
-      </Grid>
-      <Grid item xs={1} md={4}/>
-      <Grid container item xs={4} md={4} justify='flex-end'>
-        <Button
-          size='medium'
-          color='secondary'
-          onClick={() => logout(authContext)}
-        >
-          Sign Out
-        </Button>
-      </Grid>
-    </Grid>
+    <header className={classes.root}>
+      <Tabs
+        value={pageNames.indexOf(pageName)}
+        onChange={(e, v) => setPageName(pageNames[v])}
+        variant="fullWidth"
+        aria-label="icon label tabs example"
+      >
+        <Tab icon={<SearchIcon className={classes.navIcons} />} disableRipple/>
+        <Tab icon={<HomeIcon className={classes.navIcons} />} disableRipple/>
+        <Tab icon={<PersonPinIcon className={classes.navIcons} />} disableRipple/>
+      </Tabs>
+    </header>
   )
 }
 
