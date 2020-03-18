@@ -10,7 +10,7 @@ const Search = (props) => {
   return (
     <Grid item xs={12}>
       <ProfileSearch setMatches={setMatches} />
-      <Grid container style={{ marginTop: '3vh' }}>
+      <Grid container style={{ marginTop: '1.5rem' }}>
         {
           matches.map(match => {
             return (

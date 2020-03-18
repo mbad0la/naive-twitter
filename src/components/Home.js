@@ -8,7 +8,7 @@ const Home = (props) => {
   return (
     <Grid item xs={12}>
       <PostMaker />
-      <Grid container style={{ marginTop: '3vh' }}>
+      <Grid container style={{ marginTop: '1.5rem' }}>
         <Feed />
       </Grid>
     </Grid>
