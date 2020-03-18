@@ -6,7 +6,8 @@ import axios from 'axios'
 
 import App from './App'
 import Login from './Login'
-import Register from './Register'
+
+const Register = React.lazy(() => import('./Register'))
 
 import { AuthContext } from '../contexts'
 

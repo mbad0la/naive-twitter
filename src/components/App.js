@@ -6,9 +6,11 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import Header from './Header'
 import { Landing } from './Landing'
-import { Profile } from './Profile'
-import { Home } from './Home'
-import { Search } from './Search'
+
+const Profile = React.lazy(() => import('./Profile'))
+const Home = React.lazy(() => import('./Home'))
+const Search = React.lazy(() => import('./Search'))
+
 import { Splash } from './Splash'
 
 import { AuthContext, FeedContext } from '../contexts'
