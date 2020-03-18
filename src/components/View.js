@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import axios from 'axios'
 
 import App from './App'
-import Login from './Login'
 
-const Register = React.lazy(() => import('./Register'))
+const Login = React.lazy(() => import(/* webpackChunkName: "login" */ './Login'))
+const Register = React.lazy(() => import(/* webpackChunkName: "register" */ './Register'))
 
 import { AuthContext } from '../contexts'
 
@@ -63,9 +63,11 @@ function View(props) {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <Route exact path='/' render={() => <App/>} />
-      <Route exact path='/login' render={() => <Login/>} />
-      <Route exact path='/register' render={() => <Register/>} />
+      <Suspense fallback={null}>
+        <Route exact path='/' render={() => <App/>} />
+        <Route exact path='/login' render={() => <Login/>} />
+        <Route exact path='/register' render={() => <Register/>} />
+      </Suspense>
     </AuthContext.Provider>
   )
 }

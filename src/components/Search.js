@@ -25,4 +25,4 @@ const Search = (props) => {
   )
 }
 
-export { Search }
+export default Search

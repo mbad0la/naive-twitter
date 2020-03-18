@@ -105,7 +105,7 @@ function Login(props) {
 
   return (
     <Grid container className={classes.root} justify='center' alignItems='flex-start'>
-      <Grid container item xs={10} md={3} direction='column'>
+      <Grid container item xs={10} sm={6} md={3} direction='column'>
         <Grid container item xs={12} justify='center'>
           <MeetingRoomIcon style={{ color: 'rgb(16, 31, 51)', fontSize: '3.5rem', margin: '1rem 0' }}/>
         </Grid>

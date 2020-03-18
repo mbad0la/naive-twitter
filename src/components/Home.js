@@ -15,4 +15,4 @@ const Home = (props) => {
   )
 }
 
-export { Home }
+export default Home

@@ -63,7 +63,7 @@ export const Landing = (props) => {
 
   return (
     <Grid container className={classes.guestScreenRoot} justify='center' alignItems='center'>
-      <Grid container item md={3} xs={10}>
+      <Grid container item md={3} sm={6} xs={10}>
         <Grid item xs={3}>
           <img src='/assets/naive-twitter-logo.svg' className={classes.logo}/>
         </Grid>

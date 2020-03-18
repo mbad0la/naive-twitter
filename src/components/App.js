@@ -1,5 +1,6 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, Suspense } from 'react'
 
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -7,9 +8,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import Header from './Header'
 import { Landing } from './Landing'
 
-const Profile = React.lazy(() => import('./Profile'))
-const Home = React.lazy(() => import('./Home'))
-const Search = React.lazy(() => import('./Search'))
+const Profile = React.lazy(() => import(/* webpackChunkName: "profile" */ './Profile'))
+const Home = React.lazy(() => import(/* webpackChunkName: "home" */ './Home'))
+const Search = React.lazy(() => import(/* webpackChunkName: "search" */ './Search'))
 
 import { Splash } from './Splash'
 
@@ -42,7 +43,9 @@ function App(props) {
         <Header pageName={pageName} setPageName={setPageName}/>
         <Grid container justify='center' className={classes.content}>
             <Grid item xs={10} sm={6} md={4} >
-              <Content name={pageName} />
+              <Suspense fallback={<CircularProgress />}>
+                <Content name={pageName} />
+              </Suspense>
             </Grid>
         </Grid>
       </FeedContext.Provider>
