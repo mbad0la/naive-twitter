@@ -40,17 +40,23 @@ const useStyles = makeStyles(theme => ({
     }
   },
   postField: {
+    '& label': {
+      color: '#969696'
+    },
     '& label.Mui-focused': {
       color: 'rgb(29, 161, 242)',
     },
-    '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-      borderBottom: '2px solid rgba(0, 0, 0, 0.42)'
+    '& .MuiFilledInput-underline:before': {
+      borderBottomColor: '#969696',
     },
-    '& .MuiInput-underline:after': {
+    '& .MuiFilledInput-underline:after': {
       borderBottomColor: 'rgb(29, 161, 242)',
     },
     '& .MuiInputBase-root > input': {
-      color: 'rgb(29, 161, 242)'
+      color: 'rgb(16, 31, 51)'
+    },
+    '& .MuiFilledInput-root': {
+      backgroundColor: '#efefef'
     }
   }
 }))
@@ -81,11 +87,13 @@ function PostMaker(props) {
     <Paper elevation={3} className={classes.postMakerRoot}>
       <TextField
         className={classes.postField}
+        multiline
         value={content}
         fullWidth={true}
-        label="Your thoughts go here ..."
+        label='Something on your mind?'
         multiline
-        rows={1}
+        rows={3}
+        variant='filled'
         onChange={(e) => update(e, setContent)}
       />
       <Grid container className={classes.postMakerActionGrid}>
