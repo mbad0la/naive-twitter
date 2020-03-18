@@ -23,6 +23,11 @@ const useStyles = makeStyles(theme => ({
   },
   feedMargin: {
     marginTop: theme.spacing(2)
+  },
+  chunkLoader: {
+    position: 'relative',
+    left: 'calc(50% - 20px)',
+    color: 'rgb(29, 161, 242)' 
   }
 }))
 
@@ -43,7 +48,7 @@ function App(props) {
         <Header pageName={pageName} setPageName={setPageName}/>
         <Grid container justify='center' className={classes.content}>
             <Grid item xs={10} sm={6} md={4} >
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense fallback={<CircularProgress className={classes.chunkLoader} />}>
                 <Content name={pageName} />
               </Suspense>
             </Grid>
