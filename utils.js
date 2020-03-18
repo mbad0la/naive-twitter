@@ -1,4 +1,5 @@
 const fs = require('fs')
+const crypto = require('crypto')
 
 const jwt = require('jwt-simple')
 
@@ -11,15 +12,14 @@ const validateToken = (token, key) => {
         let tokenArgs = token.split(' ')
         if (tokenArgs[0] == 'JWT') {
           const credentials = jwt.decode(tokenArgs[1], key)
+
           User.findOne({ username: credentials.username })
           .then(user => {
             if (user && user.password == credentials.password) {
               resolve({ 
                 isAuthenticated: true, 
                 user: {
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  name: ( user.name ? user.name : `${user.firstName} ${user.lastName}` ),
+                  name: user.name,
                   username: user.username,
                   followers: user.followers
                 }
@@ -45,14 +45,17 @@ const verifyLogin = (basicAuth, key) => {
     if (basicAuth.username && basicAuth.password) {
       User.findOne({ username: basicAuth.username })
       .then(user => {
+        const hash = crypto.createHash('sha256')
+
+        hash.update(basicAuth.password)
+        basicAuth.password = hash.digest('hex')
+
         if (user && user.password == basicAuth.password) {
           resolve({
             isAuthenticated: true,
             token: `JWT ${jwt.encode(basicAuth, key)}`,
             user: {
-              firstName: user.firstName,
-              lastName: user.lastName,
-              name: ( user.name ? user.name : `${user.firstName} ${user.lastName}` ),
+              name: user.name,
               username: user.username,
               followers: user.followers
             }
@@ -72,6 +75,11 @@ const verifyLogin = (basicAuth, key) => {
 }
 
 const validateRegistration = userInfo => {
+  const hash = crypto.createHash('sha256')
+
+  hash.update(userInfo.password)
+  userInfo.password = hash.digest('hex')
+
   let user = new User(userInfo)
 
   return new Promise((resolve, reject) => {

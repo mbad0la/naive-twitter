@@ -72,18 +72,16 @@ function ProfileCard(props) {
   const authContext = useContext(AuthContext)
   const { setFeed } = useContext(FeedContext)
   const { data } = props;
-  const { firstName, lastName, name, username } = data;
+  const { name, username } = data;
 
   const classes = useStyles()
-
-  const cardTitle = ( name ? name : `${firstName} ${lastName}` )
     
   return (
     <Card className={classes.cardDimensions}>
       <CardHeader
-        title={cardTitle}
+        title={name}
         subheader={username}
-        avatar={<Avatar>{cardTitle.substring(0, 1)}</Avatar>}
+        avatar={<Avatar>{name.substring(0, 1)}</Avatar>}
       />
       {
         (authContext.user.username !== username) ? (

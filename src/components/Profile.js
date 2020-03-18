@@ -53,11 +53,9 @@ const useStyles = makeStyles(theme => ({
 const Profile = (props) => {
   const authContext = useContext(AuthContext)
   const { user } = authContext
-  const { firstName, lastName, name, followers, username } = user
+  const { name, followers, username } = user
 
   const classes = useStyles()
-
-  const profileName = name ? name : `${firstName} ${lastName}`
 
   return (
     <Grid item xs={12}>
@@ -65,7 +63,7 @@ const Profile = (props) => {
         <CardContent className={classes.cover}/>
         <CardContent>
           <Typography gutterBottom variant='h5' component='h2'>
-            {profileName}
+            {name}
           </Typography>
           <Grid container justify='space-around' direction='row' spacing={6}>
             <Grid item xs={6}>

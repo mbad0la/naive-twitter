@@ -79,11 +79,6 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           if (feedback.isAuthenticated) {
             User.findOne({ username: feedback.user.username })
               .then(doc => {
-                // DB migration
-                if (!doc.name) {
-                  doc.name = `${doc.firstName} ${doc.lastName}`
-                }
-
                 let newFollowing = doc.followers.addToSet(req.params.destination)
                 doc.save((err, doc) => {
                   let feed_followers = doc.followers
@@ -94,8 +89,6 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
                       res.json({
                         success: true,
                         user: {
-                          firstName: doc.firstName,
-                          lastName: doc.lastName,
                           name: doc.name,
                           username: doc.username,
                           followers: doc.followers
@@ -122,11 +115,6 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           if (feedback.isAuthenticated) {
             User.findOne({ username: feedback.user.username })
               .then(doc => {
-                // DB migration
-                if (!doc.name) {
-                  doc.name = `${doc.firstName} ${doc.lastName}`
-                }
-
                 doc.followers = doc.followers.filter(username => (username != req.params.destination))
                 doc.save((err, doc) => {
                   let feed_followers = doc.followers
@@ -136,8 +124,6 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
                       res.json({
                         success: true,
                         user: {
-                          firstName: doc.firstName,
-                          lastName: doc.lastName,
                           name: doc.name,
                           username: doc.username,
                           followers: doc.followers
