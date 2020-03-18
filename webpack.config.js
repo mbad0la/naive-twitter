@@ -3,6 +3,7 @@ const webpack = require("webpack")
 const { resolve } = require('path')
 
 module.exports = {
+  mode: 'development',
   entry: './src/index.js',
   output: {
     publicPath: '/js/',

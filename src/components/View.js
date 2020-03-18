@@ -6,8 +6,8 @@ import axios from 'axios'
 
 import App from './App'
 
-const Login = React.lazy(() => import(/* webpackChunkName: "login" */ './Login'))
-const Register = React.lazy(() => import(/* webpackChunkName: "register" */ './Register'))
+const Login = React.lazy(() => import(/* webpackChunkName: "login", webpackPrefetch: true */ './Login'))
+const Register = React.lazy(() => import(/* webpackChunkName: "register", webpackPrefetch: true */ './Register'))
 
 import { AuthContext } from '../contexts'
 
