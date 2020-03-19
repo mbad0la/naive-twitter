@@ -40,28 +40,24 @@ const useStyles = makeStyles(theme => ({
 function follow(username, authContext, setFeed) {
   axios.put(`/api/following/${username}`, {}, { headers: { 'Authorization': authContext.token } })
     .then(res => {
-      if (res.data.success) {
-        localStorage.setItem('postman_naive_twitter_user', res.data.user)
-        authContext.setUser(res.data.user)
-        setFeed(res.data.feed)
-      }
+      localStorage.setItem('postman_naive_twitter_user', res.data.user)
+      authContext.setUser(res.data.user)
+      setFeed(res.data.feed)
     })
 }
 
 function unfollow(username, authContext, setFeed) {
   axios.delete(`/api/following/${username}`, { headers: { 'Authorization': authContext.token } })
     .then(res => {
-      if (res.data.success) {
-        localStorage.setItem('postman_naive_twitter_user', res.data.user)
-        authContext.setUser(res.data.user)
-        setFeed(res.data.feed)
-      }
+      localStorage.setItem('postman_naive_twitter_user', res.data.user)
+      authContext.setUser(res.data.user)
+      setFeed(res.data.feed)
     })
 }
 
-function searchUsers(event, setMatches) {
+function searchUsers(event, authContext, setMatches) {
   if (event.target.value.length%2 == 1) {
-    axios.get(`/api/profiles/${event.target.value}`)
+    axios.get(`/api/profiles/${event.target.value}`, { headers: { 'Authorization': authContext.token } })
       .then(res => {
         setMatches(res.data)
       })
@@ -100,6 +96,7 @@ function ProfileCard(props) {
 }
 
 function ProfileSearch(props) {
+  const authContext = useContext(AuthContext)
   const { setMatches } = props;
 
   const classes = useStyles()
@@ -110,8 +107,7 @@ function ProfileSearch(props) {
       type='search'
       variant='outlined'
       fullWidth={true}
-      // label='Username'
-      onChange={(e) => searchUsers(e, setMatches)}
+      onChange={(e) => searchUsers(e, authContext, setMatches)}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">

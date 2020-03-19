@@ -68,11 +68,9 @@ function update(event, setContent) {
 }
 
 function createPost(payload, token, setFeed) {
-  axios.post('/api/post', payload, { headers: { 'Authorization': token } })
+  axios.post('/api/posts', payload, { headers: { 'Authorization': token } })
     .then(res => {
-      if (res.data.success) {
-        setFeed(res.data.feed)
-      }
+      setFeed(res.data.feed)
     })
 }
 
@@ -147,7 +145,7 @@ function Feed(props) {
 
   useEffect(() => {
     if (feed.length === 0) {
-      axios.get('/api/feed', { headers: { 'Authorization': token } })
+      axios.get('/api/posts', { headers: { 'Authorization': token } })
         .then(res => {
           setFeed(res.data.feed || [])
         })

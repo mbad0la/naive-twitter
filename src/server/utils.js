@@ -5,7 +5,7 @@ const jwt = require('jwt-simple')
 
 const { User } = require('./models')
 
-const validateToken = (token, key) => {
+const authenticateToken = (token, key) => {
   return new Promise((resolve, reject) => {
     if (token) {
       try {
@@ -104,4 +104,4 @@ const validateRegistration = userInfo => {
   })
 }
 
-module.exports = { validateToken, verifyLogin, validateRegistration }
+module.exports = { authenticateToken, verifyLogin, validateRegistration }

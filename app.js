@@ -9,8 +9,8 @@ const log = require('npmlog')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { validateToken, verifyLogin, validateRegistration } = require('./src/server/utils')
-const { User, Post } = require('./src/server/models')
+const { verifyLogin, validateRegistration } = require('./src/server/utils')
+const API = require('./src/server/api')
 
 const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
 
@@ -39,15 +39,6 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
       log.http(req.method, req.url)
       next()
     })
-
-    app.post('/token-check', (req, res) => {
-      const token = req.get('Authorization')
-
-      validateToken(token, JWT_KEY)
-        .then(feedback => {
-          res.json(feedback)
-        })
-    })
     
     app.post('/register', (req, res) => {
       log.info('Register', `@${req.body.username}`)
@@ -66,128 +57,8 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
           res.json(feedback)
         })
     })
-    
-    app.get('/api/profiles/:query', (req, res) => {
-      User.find({username: new RegExp(`^${req.params.query}`)}).limit(10).sort({username: -1}).select({firstName: 1, lastName: 1, username: 1, name: 1, profileImageUrl: 1})
-        .then(docs => res.json(docs))
-    })
-    
-    app.put('/api/following/:destination', (req, res) => {
-      let token = req.get('Authorization')
-      validateToken(token, JWT_KEY)
-        .then(feedback => {
-          if (feedback.isAuthenticated) {
-            User.findOne({ username: feedback.user.username })
-              .then(doc => {
-                let newFollowing = doc.followers.addToSet(req.params.destination)
-                doc.save((err, doc) => {
-                  let feed_followers = doc.followers
-                  feed_followers.push(doc.username)
-                  console.log(feed_followers)
-                  Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
-                    .then(docs => {
-                      res.json({
-                        success: true,
-                        user: {
-                          name: doc.name,
-                          username: doc.username,
-                          followers: doc.followers
-                        },
-                        feed: docs
-                      })
-                    })
-                })
-              })
-          } else {
-            res.json(feedback)
-          }
-        })
-        .catch(e => {
-          res.json({ isAuthenticated: false })
-        })
-    
-    })
-    
-    app.delete('/api/following/:destination', (req, res) => {
-      let token = req.get('Authorization')
-      validateToken(token, JWT_KEY)
-        .then(feedback => {
-          if (feedback.isAuthenticated) {
-            User.findOne({ username: feedback.user.username })
-              .then(doc => {
-                doc.followers = doc.followers.filter(username => (username != req.params.destination))
-                doc.save((err, doc) => {
-                  let feed_followers = doc.followers
-                  feed_followers.push(doc.username)
-                  Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
-                    .then(docs => {
-                      res.json({
-                        success: true,
-                        user: {
-                          name: doc.name,
-                          username: doc.username,
-                          followers: doc.followers
-                        },
-                        feed: docs
-                      })
-                    })
-                })
-              })
-          } else {
-            res.json(feedback)
-          }
-        })
-        .catch(e => {
-          res.json({ isAuthenticated: false })
-        })
-    })
-   
-    app.post('/api/post', (req, res) => {
-      let token = req.get('Authorization')
-      validateToken(token, JWT_KEY)
-        .then(feedback => {
-          if (feedback.isAuthenticated) {
-            let post = new Post({content: req.body.content, user: feedback.user})
-            post.save((err, post) => {
-              if (err) {
-                console.log(err)
-                res.json({ success: false })
-              } else {
-                let feed_followers = feedback.user.followers
-                feed_followers.push(feedback.user.username)
-                Post.find({'user.username': {$in: feed_followers}}).sort({timestamp: -1})
-                  .then(docs => {
-                    res.json({ success: true, feed: docs })
-                  })
-              }
-            })
-          } else {
-            res.json(feedback)
-          }
-        })
-    })
-    
-    app.get('/api/feed', (req, res) => {
-      let token = req.get('Authorization')
-      validateToken(token, JWT_KEY)
-        .then(feedback => {
-          if (feedback.isAuthenticated) {
-            feedback.user.followers.push(feedback.user.username)
-            Post.find({'user.username': {$in: feedback.user.followers}}).sort({timestamp: -1})
-              .then(docs => {
-                res.json({
-                  ...feedback,
-                  feed: docs
-                })
-              })
-          } else {
-            res.json(feedback)
-          }
-        })
-        .catch(e => {
-          res.json({ isAuthenticated: false })
-        })
-    })
+
+    app.use('/api', API(JWT_KEY))
     
     app.get('*', (req, res) => {
       res.sendFile('./index.html', { root: __dirname })
@@ -196,6 +67,5 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
     app.listen(serverConfig.port, () => {
       log.info('Express', `listening on port:${serverConfig.port}`)
     })
-
   }
 })

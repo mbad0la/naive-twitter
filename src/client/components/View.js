@@ -19,31 +19,23 @@ function View(props) {
 
   useEffect(() => {
     if (clientAuthFlag) {
-      console.log('view will mount in protected mode')
-      axios({ method: 'post', url: '/token-check', headers: { 'Authorization': token } })
+      axios({ method: 'post', url: '/api/check', headers: { 'Authorization': token } })
         .then(res => {
-          if (res.data.isAuthenticated) {
-            console.log('Network authorises too')
-
-            setTimeout(() => {
-              setToken(token)
-              setUser(res.data.user)
-              setServerAuthFlag(true)
-            }, 1500)
-          } else {
-            console.log('Network feels messy, authentication sync failed')
-
-            setServerAuthFlag(false)
-            setTimeout(() => {
-              setToken(null)
-              setUser(null)
-              setClientAuthFlag(false)
-            }, 1500)
-          }
+          setTimeout(() => {
+            setToken(token)
+            setUser(res.data.user)
+            setServerAuthFlag(true)
+          }, 1500)
+        })
+        .catch(err => {
+          setServerAuthFlag(false)
+          setTimeout(() => {
+            setToken(null)
+            setUser(null)
+            setClientAuthFlag(false)
+          }, 1500)
         })
     } else {
-      console.log('view will mount in unprotected mode')
-
       setToken(token)
       setClientAuthFlag(clientAuthFlag)
       setUser(user)
