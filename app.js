@@ -1,4 +1,4 @@
-#!/usr/bin/env nodejs
+#!/usr/bin/env node
 
 const fs = require('fs')
 
@@ -9,8 +9,8 @@ const log = require('npmlog')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { validateToken, verifyLogin, validateRegistration } = require('./utils')
-const { User, Post } = require('./models')
+const { validateToken, verifyLogin, validateRegistration } = require('./src/server/utils')
+const { User, Post } = require('./src/server/models')
 
 const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
 
