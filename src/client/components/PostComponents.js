@@ -67,9 +67,10 @@ function update(event, setContent) {
   }
 }
 
-function createPost(payload, token, setFeed) {
+function createPost(payload, token, setContent, setFeed) {
   axios.post('/api/posts', payload, { headers: { 'Authorization': token } })
     .then(res => {
+      setContent('')
       setFeed(res.data.feed)
     })
 }
@@ -100,7 +101,7 @@ function PostMaker(props) {
             className={classes.postButton}
             size='small'
             aria-label='publish'
-            onClick={() => createPost({ content }, token, setFeed)}
+            onClick={() => createPost({ content }, token, setContent, setFeed)}
           >
             <SendIcon />
           </Fab>
