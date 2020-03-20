@@ -23,7 +23,7 @@ function View(props) {
         .then(res => {
           setTimeout(() => {
             setToken(token)
-            setUser(res.data.user)
+            setUser(res.data)
             setServerAuthFlag(true)
           }, 1500)
         })

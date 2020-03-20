@@ -52,6 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 const Profile = (props) => {
   const authContext = useContext(AuthContext)
+
   const { user } = authContext
   const { name, followers, username } = user
 

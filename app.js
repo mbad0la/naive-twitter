@@ -9,8 +9,8 @@ const log = require('npmlog')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { verifyLogin, validateRegistration } = require('./src/server/utils')
-const API = require('./src/server/api')
+const Account = require('./src/server/account')
+const Api = require('./src/server/api')
 
 const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
 
@@ -40,25 +40,9 @@ secretsClient.getSecretValue({ SecretId: serverConfig.secretId }, (err, data) =>
       next()
     })
     
-    app.post('/register', (req, res) => {
-      log.info('Register', `@${req.body.username}`)
-    
-      validateRegistration(req.body)
-        .then(feedback => {
-          res.json(feedback)
-        })
-    })
-    
-    app.post('/login', (req, res) => {
-      log.info('Login', `@${req.body.username}`)
-    
-      verifyLogin(req.body, JWT_KEY)
-        .then(feedback => {
-          res.json(feedback)
-        })
-    })
+    app.use('/account', Account(JWT_KEY))
 
-    app.use('/api', API(JWT_KEY))
+    app.use('/api', Api(JWT_KEY))
     
     app.get('*', (req, res) => {
       res.sendFile('./index.html', { root: __dirname })

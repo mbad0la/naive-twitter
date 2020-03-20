@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function register(event, payload, authContext) {
-  axios.post('/register', payload)
+  axios.post('/account/register', payload)
     .then(res => {
       if (res.data.success) {
         authContext.setClientAuthFlag(true);

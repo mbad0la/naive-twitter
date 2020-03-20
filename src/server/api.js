@@ -30,7 +30,7 @@ const updateFollowers = (req, res, pureModifier) => {
     })
 }
 
-const API = (JWT_KEY) => {
+const Api = (JWT_KEY) => {
   const api = express.Router()
 
   api.use((req, res, next) => {
@@ -101,6 +101,4 @@ const API = (JWT_KEY) => {
   return api
 }
 
-
-
-module.exports = API
+module.exports = Api

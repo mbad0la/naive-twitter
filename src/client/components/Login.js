@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function login(payload, authContext) {
-  axios.post('/login', payload)
+  axios.post('/account/login', payload)
     .then(res => {
       if (res.data.isAuthenticated) {
         const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
