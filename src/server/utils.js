@@ -52,7 +52,7 @@ const verifyLogin = (basicAuth, key) => {
 
         if (user && user.password == basicAuth.password) {
           resolve({
-            isAuthenticated: true,
+            success: true,
             token: `JWT ${jwt.encode(basicAuth, key)}`,
             user: {
               name: user.name,
@@ -62,13 +62,13 @@ const verifyLogin = (basicAuth, key) => {
           })
         } else {
           resolve({
-            isAuthenticated: false
+            success: false
           })
         }
       })
     } else {
       resolve({
-        isAuthenticated: false
+        success: false
       })
     }
   })

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const useControlledInput = initialValue => {
+const useControlledInput = (initialValue) => {
   const [value, setValue] = useState(initialValue)
 
   const onValueChange = e => {

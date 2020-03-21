@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { Redirect } from 'react-router-dom'
 
@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField'
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
 
 import { makeStyles } from '@material-ui/core/styles'
+
+import { Alert } from '@material-ui/lab'
 
 import axios from 'axios'
 
@@ -62,15 +64,17 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function login(payload, authContext) {
+function login(payload, authContext, setError) {
+  setError(false)
+
   axios.post('/account/login', payload)
     .then(res => {
-      if (res.data.isAuthenticated) {
+      if (res.data.success) {
         const { setClientAuthFlag, setServerAuthFlag, setToken, setUser } = authContext
         const { token, user } = res.data
 
         setClientAuthFlag(true)
-
+ 
         localStorage.setItem('postman_naive_twitter_token', token)
         localStorage.setItem('postman_naive_twitter_auth', true)
         localStorage.setItem('postman_naive_twitter_user', user)
@@ -79,6 +83,9 @@ function login(payload, authContext) {
         setUser(user)
         setServerAuthFlag(true)
       }
+      else {
+        setError(true)
+      }
     })
 }
 
@@ -86,6 +93,8 @@ function Login(props) {
   const authContext = useContext(AuthContext)
   const username = useControlledInput('')
   const password = useControlledInput('')
+
+  const [error, setError] = useState(false)
 
   const classes = useStyles()
 
@@ -135,11 +144,14 @@ function Login(props) {
             fullWidth={true}
             size='large'
             className={classes.loginButton}
-            onClick={() => login(payload, authContext)}
+            onClick={() => login(payload, authContext, setError)}
           >
             Sign In
           </Button>
         </Grid>
+        {
+          error && <Alert style={{ marginTop: '1rem' }} severity='error'>Did you put in the correct letters?</Alert>
+        }
       </Grid>
     </Grid>
   )

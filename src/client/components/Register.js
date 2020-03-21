@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { Redirect } from 'react-router-dom'
 
@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField'
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import { makeStyles } from '@material-ui/core/styles'
+
+import { Alert } from '@material-ui/lab'
 
 import axios from 'axios'
 
@@ -62,7 +64,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function register(event, payload, authContext) {
+function register(event, payload, authContext, setError) {
+  setError(false)
+
   axios.post('/account/register', payload)
     .then(res => {
       if (res.data.success) {
@@ -74,9 +78,9 @@ function register(event, payload, authContext) {
           password: payload.password
         }
 
-        login(loginPayload, authContext)
+        login(loginPayload, authContext, setError)
       } else {
-        // no-op
+        setError(true)
       }
     })
 }
@@ -86,6 +90,8 @@ function Register(props) {
   const name = useControlledInput('')
   const username = useControlledInput('')
   const password = useControlledInput('')
+
+  const [error, setError] = useState(false)
 
   const classes = useStyles()
 
@@ -145,11 +151,14 @@ function Register(props) {
             color='primary'
             fullWidth={true}
             size='large'
-            onClick={(e) => register(e, payload, authContext)}
+            onClick={(e) => register(e, payload, authContext, setError)}
           >
             Register
           </Button>
         </Grid>
+        {
+          error && <Alert style={{ marginTop: '1rem' }} severity='error'>Something is not right. Maybe try a different handle?</Alert>
+        }
       </Grid>
     </Grid>
   )
