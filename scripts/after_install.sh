@@ -7,4 +7,4 @@ cd /home/ubuntu/naive-twitter
 npm install
 
 # Build client JS
-npm run build
+npm run dev-build
