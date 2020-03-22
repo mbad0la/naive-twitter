@@ -9,8 +9,8 @@ const log = require('npmlog')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const Account = require('./src/server/account')
-const Api = require('./src/server/api')
+const Account = require('./src/server/routes/account')
+const Api = require('./src/server/routes/api')
 
 const serverConfig = JSON.parse(fs.readFileSync('server-config.json').toString())
 

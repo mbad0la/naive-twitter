@@ -2,7 +2,7 @@ const express = require('express')
 
 const log = require('npmlog')
 
-const { verifyLogin, validateRegistration } = require('./utils')
+const { verifyLogin, validateRegistration } = require('../utils')
 
 
 const Account = (JWT_KEY) => {

@@ -20,7 +20,7 @@ const postSchema = new Schema({
   timestamp: { type : Date, default: Date.now }
 })
 
-userSchema.index({ username: 1 })
+userSchema.index({ username: 1, name: 1 })
 postSchema.index({ 'user.username': 1, timestamp: -1 })
 
 const User = mongoose.model('users', userSchema)

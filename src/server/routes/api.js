@@ -1,7 +1,7 @@
 const express = require('express')
 
-const { authenticateToken } = require('./utils')
-const { User, Post } = require('./models')
+const { authenticateToken } = require('../utils')
+const { User, Post } = require('../models')
 
 const updateFollowers = (req, res, pureModifier) => {
   const { username } = req.user
@@ -90,7 +90,7 @@ const Api = (JWT_KEY) => {
     })
   
   api.get('/profiles/:query', (req, res) => {
-    User.find({ username: new RegExp(`^${req.params.query}`) })
+    User.find({ $or: [{ username: new RegExp(`^${req.params.query}`) }, { name: new RegExp(`^${req.params.query}`) }] })
       .limit(10)
       .sort({ username: -1 })
       .select({ username: 1, name: 1 })
