@@ -24,7 +24,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.46",
     "aws-sdk": "^2.637.0",
-    "axios": "~0.19.2",
+    "axios": "~0.21.1",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
